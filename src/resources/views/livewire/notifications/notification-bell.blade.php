@@ -1,13 +1,8 @@
 <div x-data="{ open: false }" x-on:keydown.escape="open = false" class="relative">
-
+    {{-- Botão de notificações --}}
     <button 
         x-on:click="open = !open"
-        class="cursor-pointer relative p-2 group rounded-full transition-all duration-200 ease-out
-               bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800
-               backdrop-blur-xl border border-black/5 dark:border-white/10
-               hover:border-black/10 dark:hover:border-white/20
-               shadow-sm hover:shadow-md
-               focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-0"
+        class="cursor-pointer relative p-2 group rounded-full transition-all duration-200 ease-out"
         aria-label="Notificações"
         aria-haspopup="true"
         :aria-expanded="open"
@@ -29,23 +24,37 @@
             @endif
         </div>
     </button>
-
+    <div 
+        x-show="open" 
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="sm:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+        x-on:click="open = false"
+        style="display: none;"
+    ></div>
     <div 
         x-show="open"
         x-transition:enter="transition ease-out duration-200"
-        x-transition:enter-start="opacity-0 translate-y-1 scale-98"
+        x-transition:enter-start="opacity-0 translate-y-1 scale-95"
         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-        x-transition:leave-end="opacity-0 translate-y-1 scale-98"
+        x-transition:leave-end="opacity-0 translate-y-1 scale-95"
         x-on:click.away="open = false"
-        class="fixed sm:absolute top-full right-0 mt-2 mr-2 sm:mr-0 w-screen sm:w-80 max-w-[calc(100vw-1rem)] z-50 
-               bg-white/95 dark:bg-gray-900/95 backdrop-blur-2xl
-               border border-black/10 dark:border-white/10 
+        class="fixed sm:absolute 
+               top-16 left-4 right-4 
+               sm:top-full sm:left-auto sm:right-0 sm:left-auto
+               mt-2 w-auto sm:w-80 z-50 
+               bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl
+               border border-gray-200/50 dark:border-gray-700/50 
                rounded-2xl shadow-2xl overflow-hidden"
         style="display: none;"
     >
-        <div class="flex items-center justify-between px-4 py-3 border-b border-black/5 dark:border-white/5">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200/50 dark:border-gray-700/50">
             <h3 class="text-base font-semibold text-gray-900 dark:text-white flex items-center">
                 <div class="w-6 h-6 mr-2 rounded-md bg-blue-500 flex items-center justify-center">
                     <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -58,21 +67,19 @@
                 <button 
                     wire:click="markAllAsRead"
                     class="cursor-pointer text-sm font-medium text-blue-500 hover:text-blue-600 
-                           transition-colors"
+                           transition-colors px-2 py-1 rounded-md hover:bg-blue-50 dark:hover:bg-blue-500/10"
                 >
                     Limpar
                 </button>
             @endif
         </div>
-
-        <div class="max-h-96 overflow-y-auto apple-scrollbar">
+        <div class="max-h-[60vh] sm:max-h-96 overflow-y-auto apple-scrollbar">
             @forelse($notifications as $notification)
-                <div class="group relative border-b border-black/5 dark:border-white/5 last:border-b-0 
-                          hover:bg-black/[0.02] dark:hover:bg-white/[0.02] 
+                <div class="group relative border-b border-gray-200/30 dark:border-gray-700/30 last:border-b-0 
+                          hover:bg-gray-50/50 dark:hover:bg-gray-800/50 
                           transition-colors duration-200">
                     
                     <div class="flex items-start px-4 py-3 {{ $notification['read_at'] ? 'opacity-60' : '' }}">
-                        
                         <div class="flex-shrink-0 mr-3 mt-0.5">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium
                                 {{ $notification['type'] === 'success' ? 'bg-green-500' : '' }}
@@ -99,11 +106,9 @@
                                 @endif
                             </div>
                         </div>
-
-                        
                         <div class="flex-1 min-w-0">
                             <div class="flex items-start justify-between mb-1">
-                                <div class="flex-1 min-w-0">
+                                <div class="flex-1 min-w-0 pr-2">
                                     @if(isset($notification['action_url']))
                                         <a href="{{ $notification['action_url'] }}" class="block">
                                     @endif
@@ -116,8 +121,7 @@
                                         </a>
                                     @endif
                                 </div>
-
-                                <div class="flex items-center ml-2 space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                <div class="flex items-center space-x-1 opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0">
                                     @if(!$notification['read_at'])
                                         <button 
                                             wire:click="markAsRead({{ $notification['id'] }})"
@@ -146,22 +150,22 @@
                                 </div>
                             </div>
 
-                            <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed mb-1">
+                            <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed mb-2">
                                 {{ $notification['message'] }}
                             </p>
                             
                             <p class="text-xs text-gray-400 dark:text-gray-500">
                                 {{ \Carbon\Carbon::parse($notification['created_at'])->diffForHumans() }}
                             </p>
-                            
+                        
                             @if(!$notification['read_at'])
-                                <div class="absolute top-4 left-2 w-2 h-2 bg-blue-500 rounded-full"></div>
+                                <div class="absolute top-3 left-1 w-2 h-2 bg-blue-500 rounded-full"></div>
                             @endif
                         </div>
                     </div>
                 </div>
             @empty
-
+            
                 <div class="px-4 py-8 text-center">
                     <div class="mx-auto w-12 h-12 mb-4 rounded-full bg-gray-100 dark:bg-gray-800 
                                flex items-center justify-center">
@@ -215,6 +219,7 @@
         .dark .apple-scrollbar:hover::-webkit-scrollbar-thumb {
             background-color: rgba(255, 255, 255, 0.2);
         }
+        
         .line-clamp-1 {
             display: -webkit-box;
             -webkit-line-clamp: 1;
@@ -228,15 +233,19 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-        .scale-98 {
-            transform: scale(0.98);
-        }
+        
         * {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
+        
         button:focus {
             outline: none;
+        }
+        @media (max-width: 640px) {
+            .apple-scrollbar {
+                -webkit-overflow-scrolling: touch;
+            }
         }
     </style>
 </div>

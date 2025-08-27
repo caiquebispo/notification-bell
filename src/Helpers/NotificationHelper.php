@@ -2,9 +2,8 @@
 
 namespace CaiqueBispo\NotificationBell\Helpers;
 
+use CaiqueBispo\NotificationBell\Jobs\NotificationBellJob;
 use CaiqueBispo\NotificationBell\Models\Notification;
-
-
 
 class NotificationHelper
 {
@@ -29,18 +28,19 @@ class NotificationHelper
                         'updated_at' => now()
                     ];
                 }
-
-                Notification::insert($notifications);
+                NotificationBellJob::dispatch($notifications);
             }
         } else {
 
-            Notification::create([
+            NotificationBellJob::dispatch([
                 'user_id' => $userId,
                 'title' => $title,
                 'message' => $message,
                 'type' => $type,
                 'data' => $data,
-                'action_url' => $actionUrl
+                'action_url' => $actionUrl,
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
         }
     }

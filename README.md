@@ -1,18 +1,21 @@
 # Laravel Notifications Package
 
-An elegant and responsive Laravel package for managing notifications with Livewire, featuring full dark mode support.
+An elegant and responsive Laravel package for managing notifications with Livewire, featuring full dark mode support and queue system.
 
 ## Features
 
 - ✅ Modern and responsive interface  
 - ✅ Full dark mode support  
-- ✅ Real-time notification counter  
 - ✅ Multiple notification types (success, error, warning, info)  
 - ✅ Dropdown panel with actions (mark as read, delete)  
 - ✅ Seamless Livewire integration  
-- ✅ Configurable and extensible  
 - ✅ Trait for the User model  
 - ✅ Helper class for simplified usage  
+- ✅ **Queue system for better performance**
+
+# Queue Configuration
+## Important: Queue Worker Required
+All notifications are now processed through Laravel queues for better performance and scalability. You must run the queue worker for notifications to be delivered:
 
 ## Installation
 
@@ -129,7 +132,7 @@ $user->info('Info', 'Important information');
 ### In Controllers
 
 ```php
-auth()->user()->notifySuccess(
+auth()->user()->success(
     'Order Created!',
     'Your order #' . $order->id . ' was successfully created',
     ['order_id' => $order->id],

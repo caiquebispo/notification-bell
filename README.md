@@ -174,13 +174,13 @@ php artisan notifications:cleanup
 Example send notification all users
 
 ```php
-php artisan notifications:send-bulk "Título" "Mensagem" --all-users
+php artisan notifications:send "Título" "Mensagem" --all-users
 ```
 
 Example send notification specific users
 
 ```php
-php artisan notifications:send-bulk "Manutenção" "Sistema em manutenção" --users=1,2,3 --type=warning
+php artisan notifications:send "Manutenção" "Sistema em manutenção" --users=1,2,3 --type=warning
 ```
 
 Schedule it in `app/Console/Kernel.php`:

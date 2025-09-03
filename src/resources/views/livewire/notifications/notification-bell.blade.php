@@ -79,15 +79,18 @@
                 </div>
                 Notificações
             </h3>
-            @if($unreadCount > 0)
-                <button 
-                    wire:click="markAllAsRead"
-                    class="cursor-pointer text-sm font-medium text-blue-500 hover:text-blue-600 
-                           transition-colors px-2 py-1 rounded-md hover:bg-blue-50 dark:hover:bg-blue-500/10"
-                >
-                    Limpar
-                </button>
-            @endif
+            <div class="flex items-center space-x-2">
+                @if($unreadCount > 0)
+                    <button 
+                        wire:click="markAllAsRead"
+                        class="cursor-pointer text-sm font-medium text-blue-500 hover:text-blue-600 
+                               transition-colors px-2 py-1 rounded-md hover:bg-blue-50 dark:hover:bg-blue-500/10"
+                    >
+                        Marcar como lidas
+                    </button>
+                @endif
+
+            </div>
         </div>
         <div class="max-h-[60vh] sm:max-h-96 overflow-y-auto apple-scrollbar">
             @forelse($notifications as $notification)
@@ -162,7 +165,7 @@
                             </div>
 
                             <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed mb-2">
-                                {{ $notification['message'] }}
+                                {!! $notification['message'] !!}
                             </p>
                             
                             <p class="text-xs text-gray-400 dark:text-gray-500">
@@ -269,8 +272,8 @@
             <div class="px-6 py-4 max-h-[60vh] overflow-y-auto apple-scrollbar">
                 <div class="space-y-4">
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap"
-                           x-text="selectedNotification?.message"></p>
+                        <div class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap"
+                           x-html="selectedNotification?.message"></div>
                     </div>
                     
                     <div class="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500 pt-2 border-t border-gray-200/30 dark:border-gray-700/30">

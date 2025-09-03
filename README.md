@@ -1,10 +1,10 @@
 # Laravel Notifications Package
 
-An elegant and responsive Laravel package for managing notifications with Livewire, featuring full dark mode support and queue system.
+An elegant and responsive Laravel package for managing notifications with Livewire and Tailwind CSS, featuring full dark mode support, authentication protection, and queue system.
 
 ## Features
 
-- ✅ Modern and responsive interface  
+- ✅ Modern and responsive interface with Tailwind CSS  
 - ✅ Full dark mode support  
 - ✅ Multiple notification types (success, error, warning, info)  
 - ✅ Dropdown panel with actions (mark as read, delete)  
@@ -12,10 +12,17 @@ An elegant and responsive Laravel package for managing notifications with Livewi
 - ✅ Trait for the User model  
 - ✅ Helper class for simplified usage  
 - ✅ **Queue system for better performance**
+- ✅ **Authentication protection for notification routes**
+- ✅ **Admin panel for notification management**
 
 # Queue Configuration
 ## Important: Queue Worker Required
 All notifications are now processed through Laravel queues for better performance and scalability. You must run the queue worker for notifications to be delivered:
+
+## For access the admin panel use the route:
+```
+/notifications
+```
 
 ## Installation
 
@@ -94,6 +101,49 @@ The package automatically detects and adapts to your system's dark mode. Ensure 
 ```
 
 If you use a dark mode toggle, the component will adapt automatically.
+
+## Authentication Protection
+
+All notification management routes are protected with Laravel's authentication middleware. Only authenticated users can access the notification panel and perform CRUD operations.
+
+```php
+// The routes are automatically protected with the 'auth' middleware
+Route::middleware('auth')->group(function () {
+    Route::get('/notifications', [PanelNotificationController::class, 'index'])->name('notifications.index');
+    // Other notification routes...
+});
+```
+
+## Testing
+
+This package includes a comprehensive test suite built with PestPHP. To run the tests:
+
+```bash
+# Run all tests
+php artisan test
+
+# Run specific notification tests
+php artisan test --filter=NotificationTest
+```
+
+The test suite covers:
+- Authentication protection
+- CRUD operations for notifications
+- Filtering functionality
+- User-specific notifications
+
+## Admin Panel
+
+The package includes a comprehensive admin panel for managing notifications. To access it, navigate to `/notifications` in your browser (requires authentication).
+
+Features of the admin panel:
+- Create, edit, and delete notifications
+- Filter notifications by title, user, and type
+- Send notifications to specific users or all users
+- Responsive design with Tailwind CSS
+- Dark mode support
+
+![Admin Panel Screenshot](https://via.placeholder.com/800x450.png?text=Notification+Admin+Panel)
 
 ## Usage
 

@@ -7,7 +7,17 @@
         "notifications",
         "bell",
         "dark-mode",
-        "responsive"
+        "responsive",
+        "notification-system",
+        "notification-manager",
+        "notification-bell",
+        "laravel-notifications",
+        "livewire-notifications",
+        "real-time-notifications",
+        "user-notifications",
+        "elegant-ui",
+        "tailwind",
+        "alpinejs"
     ],
     "type": "library",
     "license": "MIT",

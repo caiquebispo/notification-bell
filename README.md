@@ -1,7 +1,13 @@
 # Laravel Notifications Package
 
 An elegant and responsive Laravel package for managing notifications with Livewire and Tailwind CSS, featuring full dark mode support, authentication protection, and queue system.
-
+<p align="center">
+  <a href="https://packagist.org/packages/caiquebispo/notification-bell"><img src="http://poser.pugx.org/caiquebispo/notification-bell/v" alt="Latest Stable Version"></a>
+  <a href="https://packagist.org/packages/caiquebispo/notification-bell"><img src="http://poser.pugx.org/caiquebispo/notification-bell/downloads" alt="Total Downloads"></a>
+  <a href="https://packagist.org/packages/caiquebispo/notification-bell"><img src="http://poser.pugx.org/caiquebispo/notification-bell/v/unstable" alt="Latest Unstable Version"></a>
+  <a href="https://packagist.org/packages/caiquebispo/notification-bell"><img src="http://poser.pugx.org/caiquebispo/notification-bell/license" alt="License"></a>
+  <a href="https://packagist.org/packages/caiquebispo/notification-bell"><img src="http://poser.pugx.org/caiquebispo/notification-bell/require/php" alt="PHP Version Require"></a>
+</p>
 ## Features
 
 - ✅ Modern and responsive interface with Tailwind CSS  

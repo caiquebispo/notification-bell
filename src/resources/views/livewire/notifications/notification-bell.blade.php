@@ -1,7 +1,31 @@
-<div x-data="{ 
+<div 
+    x-data="{ 
     open: false, 
     modalOpen: false,
     selectedNotification: null,
+    
+    // Toast Logic
+    toast: { show: false, title: '', message: '', type: 'info' },
+    showToast(data) {
+        this.toast = { 
+            show: true, 
+            title: data.title, 
+            message: data.message, 
+            type: data.type || 'info' 
+        };
+        
+        // Play Sound
+        @if(config('notifications.features.sound.enabled', false))
+            const audio = new Audio('{{ asset(config('notifications.features.sound.success')) }}');
+            if(data.type === 'error' && '{{ config('notifications.features.sound.error') }}') {
+                audio.src = '{{ asset(config('notifications.features.sound.error')) }}';
+            }
+            audio.play().catch(e => console.log('Audio blocked', e));
+        @endif
+
+        setTimeout(() => { this.toast.show = false }, {{ config('notifications.features.toasts.duration', 5000) }});
+    },
+
     openModal(notification) {
         this.selectedNotification = notification;
         this.modalOpen = true;
@@ -10,7 +34,66 @@
         this.modalOpen = false;
         this.selectedNotification = null;
     }
-}" x-on:keydown.escape="modalOpen ? closeModal() : (open = false)" class="relative">
+}" 
+x-get-notification.window="showToast($event.detail)"
+x-on:new-notification.window="showToast($event.detail)"
+x-on:keydown.escape="modalOpen ? closeModal() : (open = false)" 
+   class="relative"
+   @if(config('notifications.polling.enabled', true))
+       wire:poll.{{ config('notifications.polling.interval', '10s') }}="loadNotifications"
+   @endif
+>
+
+    {{-- TOAST NOTIFICATION UI --}}
+    <div x-show="toast.show" 
+         x-transition:enter="transform ease-out duration-300 transition"
+         x-transition:enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+         x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
+         x-transition:leave="transition ease-in duration-100"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed bottom-4 right-4 z-50 max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden" 
+         style="display: none;"
+    >
+        <div class="p-4">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <template x-if="toast.type === 'success'">
+                        <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </template>
+                    <template x-if="toast.type === 'error'">
+                        <svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </template>
+                    <template x-if="toast.type === 'info' || !toast.type">
+                        <svg class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </template>
+                     <template x-if="toast.type === 'warning'">
+                        <svg class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </template>
+                </div>
+                <div class="ml-3 w-0 flex-1 pt-0.5">
+                    <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="toast.title"></p>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400" x-text="toast.message"></p>
+                </div>
+                <div class="ml-4 flex-shrink-0 flex">
+                    <button @click="toast.show = false" class="bg-white dark:bg-gray-800 rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <span class="sr-only">Fechar</span>
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     {{-- Botão de notificações --}}
     <button 
         x-on:click="open = !open"
@@ -92,7 +175,7 @@
 
             </div>
         </div>
-        <div class="max-h-[60vh] sm:max-h-96 overflow-y-auto apple-scrollbar">
+        <div class="max-h-[60vh] sm:max-h-96 overflow-y-auto notification-scrollbar">
             @forelse($notifications as $notification)
                 <div class="group relative border-b border-gray-200/30 dark:border-gray-700/30 last:border-b-0 
                           hover:bg-gray-50/50 dark:hover:bg-gray-800/50 
@@ -171,6 +254,23 @@
                             <p class="text-xs text-gray-400 dark:text-gray-500">
                                 {{ \Carbon\Carbon::parse($notification['created_at'])->diffForHumans() }}
                             </p>
+
+                            {{-- Action Buttons --}}
+                            @if(isset($notification['data']['actions']) && is_array($notification['data']['actions']))
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    @foreach($notification['data']['actions'] as $action)
+                                        <a href="{{ $action['url'] ?? '#' }}" 
+                                           class="inline-flex items-center px-2 py-1 text-xs font-medium rounded border 
+                                           {{ ($action['style'] ?? 'neutral') === 'primary' ? 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800' : '' }}
+                                           {{ ($action['style'] ?? 'neutral') === 'danger' ? 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800' : '' }}
+                                           {{ ($action['style'] ?? 'neutral') === 'neutral' ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700' : '' }}
+                                           transition-colors"
+                                           x-on:click.stop>
+                                            {{ $action['label'] }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endif
                         
                             @if(!$notification['read_at'])
                                 <div class="absolute top-3 left-1 w-2 h-2 bg-blue-500 rounded-full"></div>
@@ -269,11 +369,28 @@
             </div>
             
             {{-- Conteúdo do Modal --}}
-            <div class="px-6 py-4 max-h-[60vh] overflow-y-auto apple-scrollbar">
+            <div class="px-6 py-4 max-h-[60vh] overflow-y-auto notification-scrollbar">
                 <div class="space-y-4">
                     <div>
                         <div class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap"
                            x-html="selectedNotification?.message"></div>
+
+                        {{-- Action Buttons in Modal --}}
+                        <template x-if="selectedNotification?.data?.actions">
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <template x-for="action in selectedNotification.data.actions">
+                                    <a :href="action.url || '#'" 
+                                       class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg border transition-colors"
+                                       :class="{
+                                           'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800': (action.style || 'neutral') === 'primary',
+                                           'bg-red-50 text-red-700 border-red-200 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800': (action.style || 'neutral') === 'danger',
+                                           'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700': (action.style || 'neutral') === 'neutral'
+                                       }"
+                                       x-text="action.label">
+                                    </a>
+                                </template>
+                            </div>
+                        </template>
                     </div>
                     
                     <div class="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500 pt-2 border-t border-gray-200/30 dark:border-gray-700/30">
@@ -341,69 +458,21 @@
         </div>
     </div>
 
-    <style>
-        .apple-scrollbar {
-            scrollbar-width: none;
-        }
-        
-        .apple-scrollbar::-webkit-scrollbar {
-            width: 0;
-            background: transparent;
-        }
-        
-        .apple-scrollbar:hover {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-        }
-        
-        .apple-scrollbar:hover::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .apple-scrollbar:hover::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        .apple-scrollbar:hover::-webkit-scrollbar-thumb {
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 3px;
-        }
-        
-        .dark .apple-scrollbar:hover {
-            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-        }
-        
-        .dark .apple-scrollbar:hover::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        .line-clamp-1 {
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        * {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        
-        button:focus {
-            outline: none;
-        }
-        
-        @media (max-width: 640px) {
-            .apple-scrollbar {
-                -webkit-overflow-scrolling: touch;
-            }
-        }
-    </style>
 </div>
+@push('styles')
+<style>
+    .notification-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .notification-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(156, 163, 175, 0.5);
+        border-radius: 3px;
+    }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(75, 85, 99, 0.5);
+    }
+</style>
+@endpush

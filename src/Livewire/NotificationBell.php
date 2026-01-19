@@ -11,6 +11,7 @@ class NotificationBell extends Component
     public $showPanel = false;
     public $unreadCount = 0;
     public $notifications = [];
+    public $lastNotificationId = null;
 
     protected $listeners = [
         'notification-created' => 'loadNotifications',
@@ -33,11 +34,34 @@ class NotificationBell extends Component
             ->unread()
             ->count();
 
-        $this->notifications = Notification::forUser(auth()->id())
+        $limit = config('notifications.dropdown_limit', 10);
+
+        $notifications = Notification::forUser(auth()->id())
             ->latest()
-            ->limit(10)
-            ->get()
-            ->toArray();
+            ->limit($limit)
+            ->get();
+
+        $this->notifications = $notifications->toArray();
+
+        // Check for new notifications to trigger alerts
+        if ($notifications->isNotEmpty()) {
+            $latestId = $notifications->first()->id;
+            
+            // If we have a last ID and the new latest is greater, we have new notifications
+            if ($this->lastNotificationId !== null && $latestId > $this->lastNotificationId) {
+                // Find the new notification(s)
+                $newNotification = $notifications->first(); // Simplification: just take the latest
+                
+                // Dispatch event for Toast/Sound
+                $this->dispatch('new-notification', [
+                    'title' => $newNotification->title,
+                    'message' => $newNotification->message,
+                    'type' => $newNotification->type
+                ]);
+            }
+            
+            $this->lastNotificationId = $latestId;
+        }
     }
 
     public function togglePanel()

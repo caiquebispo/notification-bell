@@ -8,19 +8,19 @@ use CaiqueBispo\NotificationBell\Helpers\NotificationHelper;
 trait HasNotifications
 {
 
-    public function notifications()
+    public function bellNotifications()
     {
         return $this->hasMany(Notification::class);
     }
-    public function unreadNotifications()
+    public function unreadBellNotifications()
     {
         return $this->hasMany(Notification::class)->unread();
     }
-    public function readNotifications()
+    public function readBellNotifications()
     {
         return $this->hasMany(Notification::class)->read();
     }
-    public function notify(mixed $usersId, $title, $message, $type = 'info', $data = null, $actionUrl = null)
+    public function bellNotify(mixed $usersId, $title, $message, $type = 'info', $data = null, $actionUrl = null)
     {
         return NotificationHelper::create($usersId, $title, $message, $type, $data, $actionUrl);
     }

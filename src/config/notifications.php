@@ -16,7 +16,24 @@ return [
 
     'dropdown_limit' => 10,
 
+    'polling' => [
+        'enabled' => true,
+        'interval' => '10s',
+    ],
+
     'auto_mark_as_read' => true,
+
+    'features' => [
+        'toasts' => [
+            'enabled' => true,
+            'duration' => 5000, // 5 seconds
+        ],
+        'sound' => [
+            'enabled' => false,
+            'success' => 'vendor/notification-bell/sounds/success.mp3', // Example path
+            'error' => 'vendor/notification-bell/sounds/error.mp3',
+        ],
+    ],
 
     'types' => [
         'info' => [

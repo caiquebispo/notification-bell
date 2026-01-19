@@ -25,7 +25,15 @@ class PanelNotificationController extends Controller
             return $this->ajaxResponse($notifications);
         }
 
-        return view('notification-bell::notification-panel', compact('notifications', 'users'));
+        // Calculate Stats
+        $stats = [
+            'total' => Notification::count(),
+            'unread' => Notification::whereNull('read_at')->count(),
+            'success' => Notification::where('type', 'success')->count(),
+            'error' => Notification::where('type', 'error')->count(),
+        ];
+
+        return view('notification-bell::notification-panel', compact('notifications', 'users', 'stats'));
     }
 
     public function store(Request $request): JsonResponse
@@ -94,6 +102,32 @@ class PanelNotificationController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Erro ao excluir todas as notificações'
+            ], 500);
+        }
+    }
+
+    public function destroySelected(Request $request): JsonResponse
+    {
+        try {
+            $ids = $request->input('ids', []);
+            
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Nenhuma notificação selecionada.'
+                ], 422);
+            }
+
+            Notification::whereIn('id', $ids)->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Notificações selecionadas excluídas com sucesso!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao excluir notificações selecionadas'
             ], 500);
         }
     }

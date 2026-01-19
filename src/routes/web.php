@@ -10,4 +10,5 @@ Route::prefix('notifications')->middleware(['web', 'auth'])->group(function () {
     Route::put('/{notification}', [PanelNotificationController::class, 'update'])->name('notifications.update');
     Route::delete('/{notification}', [PanelNotificationController::class, 'destroy'])->name('notifications.destroy');
     Route::delete('/destroy/all', [PanelNotificationController::class, 'destroyAll'])->name('notifications.destroy.all');
+    Route::post('/destroy/selected', [PanelNotificationController::class, 'destroySelected'])->name('notifications.destroy.selected');
 });

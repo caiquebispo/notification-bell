@@ -28,7 +28,7 @@ class Notification extends Model
 
     public function user()
     {
-        return $this->belongsTo(config('auth.providers.users.model'));
+        return $this->belongsTo(config('notifications.user_model'));
     }
 
     public function markAsRead()

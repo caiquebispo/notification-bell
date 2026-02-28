@@ -35,7 +35,8 @@ class SendBulkNotificationsCommand extends Command
         }
 
         if ($allUsers) {
-            $users = \App\Models\User::pluck('id')->toArray();
+            $userModel = config('notifications.user_model');
+            $users = $userModel::pluck('id')->toArray();
         } elseif ($userIds) {
             $users = array_map('intval', explode(',', $userIds));
         } else {

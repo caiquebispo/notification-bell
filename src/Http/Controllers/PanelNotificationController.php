@@ -7,7 +7,6 @@ use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use CaiqueBispo\NotificationBell\Models\Notification;
@@ -17,7 +16,8 @@ class PanelNotificationController extends Controller
 {
     public function index(Request $request): View|JsonResponse
     {
-        $users = User::where('id', '!=', Auth::id())->get(['id', 'name']);
+        $userModel = config('notifications.user_model');
+        $users = $userModel::where('id', '!=', Auth::id())->get(['id', 'name']);
         
         $notifications = $this->buildNotificationsQuery($request)->paginate(10);
 
@@ -192,7 +192,7 @@ class PanelNotificationController extends Controller
             'title' => 'required|string|max:255',
             'message' => 'required|string',
             'type' => 'required|in:info,success,warning,error',
-            'recipientUser' => 'nullable|exists:users,id',
+            'recipientUser' => 'nullable|exists:' . config('notifications.user_table') . ',id',
             'url' => 'nullable|url|max:500',
             'processing_type' => 'required|in:immediate,queue',
         ]);
@@ -200,7 +200,8 @@ class PanelNotificationController extends Controller
 
     private function handleBroadcastNotification(array $validated): JsonResponse
     {
-        $users = User::all();
+        $userModel = config('notifications.user_model');
+        $users = $userModel::all();
         $isQueue = $validated['processing_type'] === 'queue';
 
         if ($isQueue) {

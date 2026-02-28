@@ -12,6 +12,8 @@ return [
 
     'user_model' => App\Models\User::class,
 
+    'user_table' => 'users',
+
     'badge_limit' => 99,
 
     'dropdown_limit' => 10,

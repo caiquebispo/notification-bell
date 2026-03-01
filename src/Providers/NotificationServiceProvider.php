@@ -13,30 +13,23 @@ class NotificationServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'notification-bell');
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         Livewire::component('notification-bell', NotificationBell::class);
 
         $this->publishes([
-            __DIR__ . '/../../public' => public_path('vendor/notification-bell'),
-        ], 'notification-bell-assets', true);
+            __DIR__ . '/../config/notifications.php' => config_path('notifications.php'),
+        ], 'notification-bell-config');
 
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/notification-bell'),
-        ], 'notification-bell-views', true);
-
-
-        $this->publishes([
-            __DIR__ . '/../resources/css' => public_path('vendor/notification-bell/css'),
-            __DIR__ . '/../resources/js' => public_path('vendor/notification-bell/js'),
-        ], 'notification-bell-assets', true);
-
+        ], 'notification-bell-views');
 
         $this->publishes([
             __DIR__ . '/../database/migrations' => database_path('migrations'),
-        ], 'notification-bell-migrations', true);
+        ], 'notification-bell-migrations');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -49,9 +42,5 @@ class NotificationServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/notifications.php', 'notifications');
-
-        $this->publishes([
-            __DIR__ . '/../config/notifications.php' => config_path('notifications.php'),
-        ], 'notification-bell-config', true);
     }
 }

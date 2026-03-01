@@ -14,6 +14,22 @@ return [
 
     'user_table' => 'users',
 
+    /*
+    |--------------------------------------------------------------------------
+    | User Column Mapping
+    |--------------------------------------------------------------------------
+    |
+    | Map the user model columns used by the notification panel.
+    | Useful for systems with different column names (e.g. 'nome' instead of 'name').
+    |
+    | Example for Brazilian systems:
+    |   'user_columns' => ['name' => 'nome'],
+    |
+    */
+    'user_columns' => [
+        'name' => 'name',
+    ],
+
     'badge_limit' => 99,
 
     'dropdown_limit' => 10,
@@ -32,8 +48,7 @@ return [
         ],
         'sound' => [
             'enabled' => false,
-            'success' => 'vendor/notification-bell/sounds/success.mp3', // Example path
-            'error' => 'vendor/notification-bell/sounds/error.mp3',
+            'volume' => 0.5, // 0.0 to 1.0
         ],
     ],
 

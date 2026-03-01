@@ -17,8 +17,9 @@ class PanelNotificationController extends Controller
     public function index(Request $request): View|JsonResponse
     {
         $userModel = config('notifications.user_model');
-        $users = $userModel::where('id', '!=', Auth::id())->get(['id', 'name']);
-        
+        $nameColumn = config('notifications.user_columns.name', 'name');
+        $users = $userModel::where('id', '!=', Auth::id())->get(['id', $nameColumn]);
+
         $notifications = $this->buildNotificationsQuery($request)->paginate(10);
 
         if ($request->ajax()) {
@@ -33,7 +34,7 @@ class PanelNotificationController extends Controller
             'error' => Notification::where('type', 'error')->count(),
         ];
 
-        return view('notification-bell::notification-panel', compact('notifications', 'users', 'stats'));
+        return view('notification-bell::notification-panel', compact('notifications', 'users', 'stats', 'nameColumn'));
     }
 
     public function store(Request $request): JsonResponse
@@ -135,8 +136,10 @@ class PanelNotificationController extends Controller
     public function show(int $id): JsonResponse
     {
         try {
-            $notification = Notification::findOrFail($id);
-            
+            $nameColumn = config('notifications.user_columns.name', 'name');
+            $notification = Notification::with("user:id,{$nameColumn}")->findOrFail($id);
+            $notification->user_name = $notification->user->{$nameColumn} ?? null;
+
             return response()->json([
                 'success' => true,
                 'notification' => $notification
@@ -159,7 +162,8 @@ class PanelNotificationController extends Controller
      */
     private function buildNotificationsQuery(Request $request)
     {
-        $query = Notification::with('user:id,name')->orderBy('created_at', 'desc');
+        $nameColumn = config('notifications.user_columns.name', 'name');
+        $query = Notification::with("user:id,{$nameColumn}")->orderBy('created_at', 'desc');
 
         if ($request->filled('search_title')) {
             $query->where('title', 'LIKE', '%' . $request->search_title . '%');
@@ -178,9 +182,11 @@ class PanelNotificationController extends Controller
 
     private function ajaxResponse($notifications): JsonResponse
     {
+        $nameColumn = config('notifications.user_columns.name', 'name');
+
         return response()->json([
             'success' => true,
-            'html' => view('notification-bell::partials.notifications-table', compact('notifications'))->render(),
+            'html' => view('notification-bell::partials.notifications-table', compact('notifications', 'nameColumn'))->render(),
             'pagination' => (string) $notifications->links(),
             'total' => $notifications->total()
         ]);

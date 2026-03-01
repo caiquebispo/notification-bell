@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@php($nameColumn = $nameColumn ?? config('notifications.user_columns.name', 'name'))
+<!DOCTYPE html>
 <html lang="pt-BR" x-data="tallstackui_darkTheme()">
 <head>
     <meta charset="UTF-8">
@@ -312,7 +313,7 @@
                                     <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="user_id" name="user_id">
                                         <option value="">Todos</option>
                                         @foreach ($users as $user)
-                                            <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
+                                            <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>{{ $user->{$nameColumn} }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -433,7 +434,7 @@
                                 <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="recipientUser" name="user_id">
                                     <option value="">Todos os usuÃ¡rios</option>
                                     @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        <option value="{{ $user->id }}">{{ $user->{$nameColumn} }}</option>
                                     @endforeach
                                 </select>
                                 <p id="recipientUser-error" class="text-red-500 text-sm mt-1 hidden"></p>
@@ -537,7 +538,7 @@
                                 <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="edit_recipientUser" name="user_id">
                                     <option value="">Todos os usuÃ¡rios</option>
                                     @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        <option value="{{ $user->id }}">{{ $user->{$nameColumn} }}</option>
                                     @endforeach
                                 </select>
                                 <p id="edit_recipientUser-error" class="text-red-500 text-sm mt-1 hidden"></p>
@@ -819,7 +820,7 @@
                                 <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
-                                ${n.notifiable?.name || 'Todos os usuÃ¡rios'}
+                                ${n.user_name || n.user?.{{ config('notifications.user_columns.name', 'name') }} || 'Todos os usuÃ¡rios'}
                             `);
 
                             // URL

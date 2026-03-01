@@ -11,36 +11,34 @@ class NotificationHelper
     public static function create(mixed $userId, string $title, string $message, $type = 'info', $data = null, $actionUrl = null): void
     {
         if (is_array($userId)) {
+            $notifications = [];
 
             foreach ($userId as $id) {
-
-                $notifications = [];
-
-                foreach ($userId as $id) {
-                    $notifications[] = [
-                        'user_id' => $id,
-                        'title' => $title,
-                        'message' => $message,
-                        'type' => $type,
-                        'data' => $data,
-                        'action_url' => $actionUrl,
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ];
-                }
-                NotificationBellJob::dispatch($notifications);
+                $notifications[] = [
+                    'user_id' => $id,
+                    'title' => $title,
+                    'message' => $message,
+                    'type' => $type,
+                    'data' => $data,
+                    'action_url' => $actionUrl,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
             }
-        } else {
 
+            NotificationBellJob::dispatch($notifications);
+        } else {
             NotificationBellJob::dispatch([
-                'user_id' => $userId,
-                'title' => $title,
-                'message' => $message,
-                'type' => $type,
-                'data' => $data,
-                'action_url' => $actionUrl,
-                'created_at' => now(),
-                'updated_at' => now()
+                [
+                    'user_id' => $userId,
+                    'title' => $title,
+                    'message' => $message,
+                    'type' => $type,
+                    'data' => $data,
+                    'action_url' => $actionUrl,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
             ]);
         }
     }
@@ -80,13 +78,12 @@ class NotificationHelper
     }
     public static function getStats($userId)
     {
-        $query = Notification::forUser($userId);
-
         return [
-            'total' => $query->count(),
-            'unread' => $query->unread()->count(),
-            'read' => $query->read()->count(),
-            'by_type' => $query->selectRaw('type, count(*) as count')
+            'total' => Notification::forUser($userId)->count(),
+            'unread' => Notification::forUser($userId)->unread()->count(),
+            'read' => Notification::forUser($userId)->read()->count(),
+            'by_type' => Notification::forUser($userId)
+                ->selectRaw('type, count(*) as count')
                 ->groupBy('type')
                 ->pluck('count', 'type')
                 ->toArray()

@@ -1,3 +1,4 @@
+@php($nameColumn = $nameColumn ?? config('notifications.user_columns.name', 'name'))
 <div class="overflow-x-auto" x-data="{ 
     selected: [],
     allSelected: false,
@@ -57,10 +58,10 @@
                         <div class="flex items-center">
                             @if($notification->user)
                                 <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">
-                                    {{ substr($notification->user->name, 0, 2) }}
+                                    {{ substr($notification->user->{$nameColumn}, 0, 2) }}
                                 </div>
                                 <div class="ml-3">
-                                    <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $notification->user->name }}</div>
+                                    <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $notification->user->{$nameColumn} }}</div>
                                 </div>
                             @else
                                 <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">

@@ -14,6 +14,14 @@ class NotificationBellJob implements ShouldQueue
 
     public function handle(): void
     {
-        Notification::insert($this->notifications);
+        $rows = array_map(function ($notification) {
+            if (isset($notification['data']) && is_array($notification['data'])) {
+                $notification['data'] = json_encode($notification['data']);
+            }
+
+            return $notification;
+        }, $this->notifications);
+
+        Notification::insert($rows);
     }
 }

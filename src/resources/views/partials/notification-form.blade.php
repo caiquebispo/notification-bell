@@ -1,3 +1,4 @@
+@php($nameColumn = $nameColumn ?? config('notifications.user_columns.name', 'name'))
 <form id="notificationForm" method="POST" class="space-y-4">
     @csrf
     <input type="hidden" name="_method" id="formMethod" value="POST">
@@ -8,7 +9,7 @@
         <select class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" id="recipientUser" name="recipientUser">
             <option value="">Todos os usuários</option>
             @foreach ($users as $user)
-                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                <option value="{{ $user->id }}">{{ $user->{$nameColumn} }}</option>
             @endforeach
         </select>
         <div class="text-sm text-red-600 mt-1 hidden" id="recipientUser-error"></div>

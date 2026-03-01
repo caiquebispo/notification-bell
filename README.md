@@ -8,27 +8,25 @@ An elegant and responsive Laravel package for managing notifications with Livewi
   <a href="https://packagist.org/packages/caiquebispo/notification-bell"><img src="http://poser.pugx.org/caiquebispo/notification-bell/license" alt="License"></a>
   <a href="https://packagist.org/packages/caiquebispo/notification-bell"><img src="http://poser.pugx.org/caiquebispo/notification-bell/require/php" alt="PHP Version Require"></a>
 </p>
+
 ## Features
 
-- ✅ Modern and responsive interface with Tailwind CSS  
-- ✅ Full dark mode support  
-- ✅ Multiple notification types (success, error, warning, info)  
-- ✅ Dropdown panel with actions (mark as read, delete)  
-- ✅ Seamless Livewire integration  
-- ✅ Trait for the User model  
-- ✅ Helper class for simplified usage  
-- ✅ **Queue system for better performance**
-- ✅ **Authentication protection for notification routes**
-- ✅ **Admin panel for notification management**
+- Modern and responsive interface with Tailwind CSS
+- Full dark mode support
+- Multiple notification types (success, error, warning, info)
+- Dropdown panel with actions (mark as read, delete)
+- Seamless Livewire integration
+- Trait for the User model
+- Helper class for simplified usage
+- Queue system for better performance
+- Authentication protection for notification routes
+- Admin panel for notification management
+- Configurable user model, table, and column mapping
+- Configurable route prefix, middleware, and naming
 
-# Queue Configuration
-## Important: Queue Worker Required
-All notifications are now processed through Laravel queues for better performance and scalability. You must run the queue worker for notifications to be delivered:
+## Queue Configuration
 
-## For access the admin panel use the route:
-```
-/notifications
-```
+All notifications are processed through Laravel queues for better performance and scalability. You must run the queue worker for notifications to be delivered.
 
 ## Installation
 
@@ -41,17 +39,20 @@ composer require caiquebispo/notification-bell
 ### 2. Publish the package assets
 
 ```bash
-# Publish migrations
+# Publish config
+php artisan vendor:publish --tag="notification-bell-config"
+
+# Publish migrations (optional - migrations run automatically)
 php artisan vendor:publish --tag="notification-bell-migrations"
 
 # Publish views (optional, for customization)
 php artisan vendor:publish --tag="notification-bell-views"
 
-# Publish config
-php artisan vendor:publish --tag="notification-bell-config"
 ```
 
 ### 3. Run the migrations
+
+Migrations are loaded automatically by the package. Just run:
 
 ```bash
 php artisan migrate
@@ -65,7 +66,7 @@ php artisan migrate
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use YourVendor\LaravelNotifications\Traits\HasNotifications;
+use CaiqueBispo\NotificationBell\Traits\HasNotifications;
 
 class User extends Authenticatable
 {
@@ -98,58 +99,151 @@ Add this to your main layout:
 @livewireScripts
 ```
 
-## Dark Mode Customization
+## Configuration
 
-The package automatically detects and adapts to your system's dark mode. Ensure your project uses Tailwind's dark mode classes:
-
-```html
-<html class="dark">
-```
-
-If you use a dark mode toggle, the component will adapt automatically.
-
-## Authentication Protection
-
-All notification management routes are protected with Laravel's authentication middleware. Only authenticated users can access the notification panel and perform CRUD operations.
-
-```php
-// The routes are automatically protected with the 'auth' middleware
-Route::middleware('auth')->group(function () {
-    Route::get('/notifications', [PanelNotificationController::class, 'index'])->name('notifications.index');
-    // Other notification routes...
-});
-```
-
-## Testing
-
-This package includes a comprehensive test suite built with PestPHP. To run the tests:
+Publish the config file and edit `config/notifications.php` to customize the package behavior.
 
 ```bash
-# Run all tests
-php artisan test
-
-# Run specific notification tests
-php artisan test --filter=NotificationTest
+php artisan vendor:publish --tag="notification-bell-config"
 ```
 
-The test suite covers:
-- Authentication protection
-- CRUD operations for notifications
-- Filtering functionality
-- User-specific notifications
+### User Model & Table
+
+Configure a custom user model and table name:
+
+```php
+'user_model' => App\Models\User::class,
+'user_table' => 'users',
+```
+
+For systems that use a different model (e.g. `Usuario`):
+
+```php
+'user_model' => App\Models\Usuario::class,
+'user_table' => 'usuarios',
+```
+
+### User Column Mapping
+
+Map user model columns used by the notification panel. Useful for systems with different column names:
+
+```php
+'user_columns' => [
+    'name' => 'name',
+],
+```
+
+For example, Brazilian systems that use `nome` instead of `name`:
+
+```php
+'user_columns' => [
+    'name' => 'nome',
+],
+```
+
+The panel will automatically use the mapped column to display user names, avatars, and dropdowns.
+
+### Route Configuration
+
+Customize the route prefix, middleware, and naming:
+
+```php
+'route' => [
+    'prefix' => 'notifications',
+    'middleware' => ['web', 'auth'],
+    'name' => 'notifications.',
+],
+```
+
+Example with a custom prefix and additional middleware:
+
+```php
+'route' => [
+    'prefix' => 'admin/notifications',
+    'middleware' => ['web', 'auth', 'role:admin'],
+    'name' => 'admin.notifications.',
+],
+```
+
+### Polling
+
+Configure real-time polling for new notifications:
+
+```php
+'polling' => [
+    'enabled' => true,
+    'interval' => '10s',
+],
+```
+
+### Toast Notifications & Sound
+
+```php
+'features' => [
+    'toasts' => [
+        'enabled' => true,
+        'duration' => 5000, // 5 seconds
+    ],
+    'sound' => [
+        'enabled' => false, // Enable notification sounds
+        'volume' => 0.5,    // Volume level: 0.0 (silent) to 1.0 (max)
+    ],
+],
+```
+
+Notification sounds are generated using the Web Audio API -- no external audio files are required. Each notification type has a unique sound:
+
+| Type | Sound |
+|------|-------|
+| **success** | Ascending two-note chime (C5 to E5) |
+| **error** | Descending two-note tone (E4 to C4) |
+| **warning** | Two short attention pulses (A4) |
+| **info** | Soft single ping (G5) |
+
+> **Note:** Browsers may block audio playback until the user has interacted with the page (clicked, tapped, or pressed a key). This is standard browser autoplay policy.
+
+### Notification Types
+
+```php
+'types' => [
+    'info'    => ['color' => 'blue',   'icon' => 'info-circle'],
+    'success' => ['color' => 'green',  'icon' => 'check-circle'],
+    'warning' => ['color' => 'yellow', 'icon' => 'exclamation-triangle'],
+    'error'   => ['color' => 'red',    'icon' => 'x-circle'],
+],
+```
+
+### Broadcasting
+
+```php
+'broadcasting' => [
+    'enabled' => false,
+    'channel' => 'notifications.{user_id}',
+    'event' => 'NotificationCreated',
+],
+```
+
+### Cleanup
+
+```php
+'cleanup' => [
+    'enabled' => true,
+    'days_to_keep' => 30,
+    'schedule' => 'daily',
+],
+```
 
 ## Admin Panel
 
-The package includes a comprehensive admin panel for managing notifications. To access it, navigate to `/notifications` in your browser (requires authentication).
+The package includes a comprehensive admin panel for managing notifications. Access it at `/notifications` (or your configured prefix) in your browser (requires authentication).
 
 Features of the admin panel:
 - Create, edit, and delete notifications
 - Filter notifications by title, user, and type
 - Send notifications to specific users or all users
+- Bulk actions (select and delete multiple)
 - Responsive design with Tailwind CSS
 - Dark mode support
-
-![Admin Panel Screenshot](https://via.placeholder.com/800x450.png?text=Notification+Admin+Panel)
 
 ## Usage
 
@@ -160,11 +254,13 @@ Features of the admin panel:
 ```php
 use CaiqueBispo\NotificationBell\Helpers\NotificationHelper;
 
+// Simple notifications
 NotificationHelper::info($userId, 'Title', 'Notification message');
 NotificationHelper::success($userId, 'Order Confirmed', 'Your order was successfully confirmed!', ['order_id' => 123], route('orders.show', 123));
 NotificationHelper::error($userId, 'Error', 'Something went wrong!');
 NotificationHelper::warning($userId, 'Warning', 'Please check your information.');
 
+// Mass notification (multiple users)
 NotificationHelper::create(
     [1, 2, 3],
     'Mass Notification',
@@ -177,18 +273,18 @@ NotificationHelper::create(
 ```php
 $user = auth()->user();
 
-$user->notify('Title', 'Message');
-$user->success('Success!', 'Operation completed.');
-$user->error('Error!', 'Something went wrong.');
-$user-warning('Warning!', 'Check your data.');
-$user->info('Info', 'Important information');
-
+$user->bellNotify($userId, 'Title', 'Message');
+$user->success($userId, 'Success!', 'Operation completed.');
+$user->error($userId, 'Error!', 'Something went wrong.');
+$user->warning($userId, 'Warning!', 'Check your data.');
+$user->info($userId, 'Info', 'Important information');
 ```
 
 ### In Controllers
 
 ```php
 auth()->user()->success(
+    $userId,
     'Order Created!',
     'Your order #' . $order->id . ' was successfully created',
     ['order_id' => $order->id],
@@ -200,46 +296,73 @@ auth()->user()->success(
 
 ```php
 NotificationHelper::success(
-    $this->userId,
+    $userId,
     'Payment Processed',
     'Your payment was successfully processed'
 );
 ```
 
-## Configuration
+### Helper Utilities
 
-Edit `config/notifications.php` to customize limits, cleanup, and more.
+```php
+// Get unread count
+NotificationHelper::getUnreadCount($userId);
 
-## Visual Customization
+// Mark all as read
+NotificationHelper::markAllAsRead($userId);
 
-- **Info**: Blue  
-- **Success**: Green  
-- **Warning**: Yellow  
-- **Error**: Red  
+// Get stats
+NotificationHelper::getStats($userId);
+// Returns: ['total' => 10, 'unread' => 3, 'read' => 7, 'by_type' => ['info' => 5, 'success' => 3, ...]]
 
-Responsive design adapts to mobile and desktop.
+// Cleanup old notifications
+NotificationHelper::cleanup(30); // Remove notifications older than 30 days
+```
+
+## Dark Mode
+
+The package automatically detects and adapts to your system's dark mode. Ensure your project uses Tailwind's dark mode classes:
+
+```html
+<html class="dark">
+```
+
+If you use a dark mode toggle, the component will adapt automatically.
 
 ## Artisan Commands
 
-Example cleanup command:
+### Cleanup notifications
 
-```php
+```bash
+# Remove old notifications (default: 30 days)
 php artisan notifications:cleanup
+
+# Custom retention period
+php artisan notifications:cleanup --days=60 --unread-days=120
+
+# Preview without deleting
+php artisan notifications:cleanup --dry-run
 ```
 
-Example send notification all users
+### Send bulk notifications
 
-```php
-php artisan notifications:send "Título" "Mensagem" --all-users
+```bash
+# Send to all users
+php artisan notifications:send-bulk "Title" "Message" --all-users
+
+# Send to specific users
+php artisan notifications:send-bulk "Maintenance" "System maintenance" --users=1,2,3 --type=warning
+
+# With action URL
+php artisan notifications:send-bulk "Update" "New version available" --all-users --url=https://example.com
+
+# Preview without sending
+php artisan notifications:send-bulk "Title" "Message" --all-users --dry-run
 ```
 
-Example send notification specific users
+### Schedule cleanup
 
-```php
-php artisan notifications:send "Manutenção" "Sistema em manutenção" --users=1,2,3 --type=warning
-```
-
-Schedule it in `app/Console/Kernel.php`:
+In `app/Console/Kernel.php`:
 
 ```php
 protected function schedule(Schedule $schedule)
@@ -250,4 +373,4 @@ protected function schedule(Schedule $schedule)
 
 ## License
 
-MIT License – see the LICENSE file for details.
+MIT License - see the LICENSE file for details.

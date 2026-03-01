@@ -908,6 +908,7 @@
                         if (response.success) {
                             window.dispatchEvent(new CustomEvent('close-modal', { detail: 'createModal' }));
                             $('#notificationForm')[0].reset();
+                            quillCreate.setContents([]); // Limpar o editor Quill
                             refreshNotificationsTable();
                             showAlert('success', response.message);
                         }
@@ -1196,35 +1197,6 @@
                 }, 300);
             };
 
-            // Formulário de criação
-             $('#createModal form').on('submit', function(e) {
-                e.preventDefault();
-                
-                // Garantir que o conteúdo do Quill Editor seja capturado
-                $('#message').val(quillCreate.root.innerHTML);
-                
-                const formData = $(this).serialize();
-                
-                $.ajax({
-                    url: '{{ route("notifications.store") }}',
-                    type: 'POST',
-                    data: formData,
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            window.dispatchEvent(new CustomEvent('close-modal', { detail: 'createModal' }));
-                            $('#notificationForm')[0].reset();
-                            quillCreate.setContents([]); // Limpar o editor Quill
-                            refreshNotificationsTable();
-                            showAlert('success', response.message);
-                        }
-                    },
-                    error: function(xhr) {
-                        const errors = xhr.responseJSON.errors;
-                        displayFormErrors(errors);
-                    }
-                });
-            });
         });
     </script>
     

@@ -34,7 +34,7 @@
         <thead class="bg-gray-50 dark:bg-gray-800">
             <tr>
                 <th scope="col" class="px-6 py-3 text-left">
-                    <input type="checkbox" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" @click="toggleAll()" :checked="allSelected">
+                    <input type="checkbox" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200/50" @click="toggleAll()" :checked="allSelected">
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Notificação</th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Usuário</th>
@@ -48,7 +48,7 @@
             @forelse ($notifications as $notification)
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150">
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <input type="checkbox" value="{{ $notification->id }}" x-model="selected" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        <input type="checkbox" value="{{ $notification->id }}" x-model="selected" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200/50">
                     </td>
                     <td class="px-6 py-4">
                         <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $notification->title }}</div>
@@ -57,14 +57,14 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             @if($notification->user)
-                                <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">
+                                <div class="shrink-0 h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">
                                     {{ substr($notification->user->{$nameColumn}, 0, 2) }}
                                 </div>
                                 <div class="ml-3">
                                     <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $notification->user->{$nameColumn} }}</div>
                                 </div>
                             @else
-                                <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                                <div class="shrink-0 h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                                     <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                     </svg>

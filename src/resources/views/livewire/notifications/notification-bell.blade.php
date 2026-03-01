@@ -120,6 +120,7 @@
 
     openModal(notification) {
         this.selectedNotification = notification;
+        this.open = false;
         this.modalOpen = true;
     },
     closeModal() {
@@ -144,12 +145,12 @@ x-on:keydown.escape="modalOpen ? closeModal() : (open = false)"
          x-transition:leave="transition ease-in duration-100"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         class="fixed bottom-4 right-4 z-50 max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden" 
+         class="fixed bottom-4 right-4 z-50 max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black/5 overflow-hidden" 
          style="display: none;"
     >
         <div class="p-4">
             <div class="flex items-start">
-                <div class="flex-shrink-0">
+                <div class="shrink-0">
                     <template x-if="toast.type === 'success'">
                         <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -175,7 +176,7 @@ x-on:keydown.escape="modalOpen ? closeModal() : (open = false)"
                     <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="toast.title"></p>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400" x-text="toast.message"></p>
                 </div>
-                <div class="ml-4 flex-shrink-0 flex">
+                <div class="ml-4 shrink-0 flex">
                     <button @click="toast.show = false" class="bg-white dark:bg-gray-800 rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <span class="sr-only">Fechar</span>
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -221,7 +222,7 @@ x-on:keydown.escape="modalOpen ? closeModal() : (open = false)"
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        class="sm:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+        class="sm:hidden fixed inset-0 bg-black/20 backdrop-blur-[4px] z-40"
         x-on:click="open = false"
         style="display: none;"
     ></div>
@@ -240,7 +241,7 @@ x-on:keydown.escape="modalOpen ? closeModal() : (open = false)"
                top-16 left-4 right-4 
                sm:top-full sm:left-auto sm:right-0 sm:left-auto
                mt-2 w-auto sm:w-80 z-50 
-               bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl
+               bg-white/95 dark:bg-gray-900/95 backdrop-blur-[24px]
                border border-gray-200/50 dark:border-gray-700/50 
                rounded-2xl shadow-2xl overflow-hidden"
         style="display: none;"
@@ -275,7 +276,7 @@ x-on:keydown.escape="modalOpen ? closeModal() : (open = false)"
                      x-on:click="openModal({{ json_encode($notification) }})">
                     
                     <div class="flex items-start px-4 py-3 {{ $notification['read_at'] ? 'opacity-60' : '' }}">
-                        <div class="flex-shrink-0 mr-3 mt-0.5">
+                        <div class="shrink-0 mr-3 mt-0.5">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium
                                 {{ $notification['type'] === 'success' ? 'bg-green-500' : '' }}
                                 {{ $notification['type'] === 'warning' ? 'bg-orange-500' : '' }}
@@ -308,7 +309,7 @@ x-on:keydown.escape="modalOpen ? closeModal() : (open = false)"
                                         {{ $notification['title'] }}
                                     </p>
                                 </div>
-                                <div class="flex items-center space-x-1 opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0">
+                                <div class="flex items-center space-x-1 opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200 shrink-0">
                                     @if(!$notification['read_at'])
                                         <button 
                                             wire:click="markAsRead({{ $notification['id'] }})"
@@ -398,7 +399,7 @@ x-on:keydown.escape="modalOpen ? closeModal() : (open = false)"
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
+        class="fixed inset-0 bg-black/50 backdrop-blur-[4px] z-[60] flex items-center justify-center p-4"
         x-on:click="closeModal()"
         style="display: none;"
     >

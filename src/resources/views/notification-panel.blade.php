@@ -379,7 +379,7 @@
                  x-transition:leave-start="opacity-100 scale-100"
                  x-transition:leave-end="opacity-0 scale-95">
                 
-                <div class="border-b border-gray-200/30 dark:border-gray-700/30 px-6 py-4 flex justify-between items-center backdrop-blur-sm">
+                <div class="border-b border-gray-200/30 dark:border-gray-700/30 px-6 py-4 flex justify-between items-center backdrop-blur-[4px]">
                     <h5 class="font-semibold text-gray-800 dark:text-white text-lg flex items-center">
                         <div class="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -395,7 +395,7 @@
                     </button>
                 </div>
                 
-                <div class="px-6 py-4 backdrop-blur-sm">
+                <div class="px-6 py-4 backdrop-blur-[4px]">
                     <form id="notificationForm" class="space-y-4">
                         <input type="hidden" id="notification_id" name="notification_id">
                         <input type="hidden" id="formMethod" name="_method" value="POST">
@@ -460,9 +460,9 @@
                     </form>
                 </div>
                 
-                <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 backdrop-blur-sm flex justify-end space-x-3 border-t border-gray-200/30 dark:border-gray-700/30">
-                    <button type="button" @click="open = false" class="px-4 py-2 bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-600/50 dark:hover:bg-gray-500/50 text-gray-800 dark:text-white rounded-lg transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Cancelar</button>
-                    <button type="submit" form="notificationForm" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Criar Notificação</button>
+                <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 backdrop-blur-[4px] flex justify-end space-x-3 border-t border-gray-200/30 dark:border-gray-700/30">
+                    <button type="button" @click="open = false" class="px-4 py-2 bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-600/50 dark:hover:bg-gray-500/50 text-gray-800 dark:text-white rounded-lg transition-all duration-200 cursor-pointer btn-hover backdrop-blur-[4px]">Cancelar</button>
+                    <button type="submit" form="notificationForm" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-[4px]">Criar Notificação</button>
                 </div>
             </div>
         </div>
@@ -483,7 +483,7 @@
                  x-transition:leave-start="opacity-100 scale-100"
                  x-transition:leave-end="opacity-0 scale-95">
                 
-                <div class="border-b border-gray-200/30 dark:border-gray-700/30 px-6 py-4 flex justify-between items-center backdrop-blur-sm">
+                <div class="border-b border-gray-200/30 dark:border-gray-700/30 px-6 py-4 flex justify-between items-center backdrop-blur-[4px]">
                     <h5 class="font-semibold text-gray-800 dark:text-white text-lg flex items-center">
                         <div class="h-8 w-8 rounded-full bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -499,7 +499,7 @@
                     </button>
                 </div>
                 
-                <div class="px-6 py-4 backdrop-blur-sm">
+                <div class="px-6 py-4 backdrop-blur-[4px]">
                     <form id="editNotificationForm" class="space-y-4">
                         <input type="hidden" id="edit_notification_id" name="notification_id">
                         <input type="hidden" name="_method" value="PUT">
@@ -564,9 +564,9 @@
                     </form>
                 </div>
                 
-                <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 backdrop-blur-sm flex justify-end space-x-3 border-t border-gray-200/30 dark:border-gray-700/30">
-                    <button type="button" @click="open = false" class="px-4 py-2 bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-600/50 dark:hover:bg-gray-500/50 text-gray-800 dark:text-white rounded-lg transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Cancelar</button>
-                    <button type="submit" form="editNotificationForm" class="px-4 py-2 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Salvar Alterações</button>
+                <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 backdrop-blur-[4px] flex justify-end space-x-3 border-t border-gray-200/30 dark:border-gray-700/30">
+                    <button type="button" @click="open = false" class="px-4 py-2 bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-600/50 dark:hover:bg-gray-500/50 text-gray-800 dark:text-white rounded-lg transition-all duration-200 cursor-pointer btn-hover backdrop-blur-[4px]">Cancelar</button>
+                    <button type="submit" form="editNotificationForm" class="px-4 py-2 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-[4px]">Salvar Alterações</button>
                 </div>
             </div>
         </div>
@@ -586,7 +586,7 @@
                  x-transition:leave-start="opacity-100 scale-100"
                  x-transition:leave-end="opacity-0 scale-95">
                 
-                <div class="border-b border-gray-200/30 dark:border-gray-700/30 px-6 py-4 flex justify-between items-center backdrop-blur-sm">
+                <div class="border-b border-gray-200/30 dark:border-gray-700/30 px-6 py-4 flex justify-between items-center backdrop-blur-[4px]">
                     <h5 class="font-semibold text-gray-800 dark:text-white text-lg flex items-center">
                         <div class="h-8 w-8 rounded-full bg-gradient-to-r from-red-500 to-pink-600 flex items-center justify-center mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -602,9 +602,9 @@
                     </button>
                 </div>
                 
-                <div class="px-6 py-6 backdrop-blur-sm">
+                <div class="px-6 py-6 backdrop-blur-[4px]">
                     <div class="flex items-center space-x-4">
-                        <div class="flex-shrink-0">
+                        <div class="shrink-0">
                             <div class="h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
@@ -619,9 +619,9 @@
                     <input type="hidden" id="delete_notification_id">
                 </div>
                 
-                <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 backdrop-blur-sm flex justify-end space-x-3 border-t border-gray-200/30 dark:border-gray-700/30">
-                    <button type="button" @click="open = false" class="px-4 py-2 bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-600/50 dark:hover:bg-gray-500/50 text-gray-800 dark:text-white rounded-lg transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Cancelar</button>
-                    <button type="button" id="confirmDelete" class="px-4 py-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">
+                <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 backdrop-blur-[4px] flex justify-end space-x-3 border-t border-gray-200/30 dark:border-gray-700/30">
+                    <button type="button" @click="open = false" class="px-4 py-2 bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-600/50 dark:hover:bg-gray-500/50 text-gray-800 dark:text-white rounded-lg transition-all duration-200 cursor-pointer btn-hover backdrop-blur-[4px]">Cancelar</button>
+                    <button type="button" id="confirmDelete" class="px-4 py-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-[4px]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
@@ -646,7 +646,7 @@
                  x-transition:leave-start="opacity-100 scale-100"
                  x-transition:leave-end="opacity-0 scale-95">
                 
-                <div class="border-b border-gray-200/30 dark:border-gray-700/30 px-6 py-4 flex justify-between items-center backdrop-blur-sm">
+                <div class="border-b border-gray-200/30 dark:border-gray-700/30 px-6 py-4 flex justify-between items-center backdrop-blur-[4px]">
                     <h5 class="font-semibold text-gray-800 dark:text-white text-lg flex items-center">
                         <div class="h-8 w-8 rounded-full bg-gradient-to-r from-teal-400 to-emerald-500 flex items-center justify-center mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -663,7 +663,7 @@
                     </button>
                 </div>
                 
-                <div class="px-6 py-6 backdrop-blur-sm space-y-6">
+                <div class="px-6 py-6 backdrop-blur-[4px] space-y-6">
                     <div class="flex items-center justify-between">
                         <div>
                             <span id="view_type" class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
@@ -707,9 +707,9 @@
                     </div>
                 </div>
                 
-                <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 backdrop-blur-sm flex justify-end space-x-3 border-t border-gray-200/30 dark:border-gray-700/30">
-                    <button type="button" @click="open = false" class="px-4 py-2 bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-600/50 dark:hover:bg-gray-500/50 text-gray-800 dark:text-white rounded-lg transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Fechar</button>
-                    <button type="button" @click="$dispatch('close-modal', 'viewModal'); setTimeout(() => { $('#edit_notification_id').val($('#view_id').val()); $('.edit-notification[data-id=\'' + $('#view_id').val() + '\']').click(); }, 300)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Editar</button>
+                <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 backdrop-blur-[4px] flex justify-end space-x-3 border-t border-gray-200/30 dark:border-gray-700/30">
+                    <button type="button" @click="open = false" class="px-4 py-2 bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-600/50 dark:hover:bg-gray-500/50 text-gray-800 dark:text-white rounded-lg transition-all duration-200 cursor-pointer btn-hover backdrop-blur-[4px]">Fechar</button>
+                    <button type="button" @click="$dispatch('close-modal', 'viewModal'); setTimeout(() => { $('#edit_notification_id').val($('#view_id').val()); $('.edit-notification[data-id=\'' + $('#view_id').val() + '\']').click(); }, 300)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-[4px]">Editar</button>
                 </div>
                 <input type="hidden" id="view_id">
             </div>
@@ -1152,17 +1152,17 @@
                 let toastId = 'toast-' + Date.now();
                 
                 let toastHtml = `
-                    <div id="${toastId}" class="pointer-events-auto w-96 overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-white dark:ring-opacity-10 transform transition-all duration-300 translate-x-full border-l-4 ${style.border}">
+                    <div id="${toastId}" class="pointer-events-auto w-96 overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black/5 dark:ring-white/10 transform transition-all duration-300 translate-x-full border-l-4 ${style.border}">
                         <div class="p-4">
                             <div class="flex items-start">
-                                <div class="flex-shrink-0 ${style.icon}">
+                                <div class="shrink-0 ${style.icon}">
                                     ${icon}
                                 </div>
                                 <div class="ml-3 w-0 flex-1 pt-0.5">
                                     <p class="text-sm font-medium text-gray-900 dark:text-white">${title || (type === 'danger' ? 'Erro' : (type === 'success' ? 'Sucesso' : 'Informação'))}</p>
                                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 break-words">${message}</p>
                                 </div>
-                                <div class="ml-4 flex flex-shrink-0">
+                                <div class="ml-4 flex shrink-0">
                                     <button type="button" class="inline-flex rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" onclick="destroyToast('${toastId}')">
                                         <span class="sr-only">Fechar</span>
                                         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

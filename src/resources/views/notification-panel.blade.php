@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Painel de NotificaÃ§Ãµes</title>
+    <title>Painel de Notificações</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -45,7 +45,7 @@
             transition: background-color 0.2s ease, color 0.2s ease;
         }
         
-        /* Cursor pointer para todos os botÃµes */
+        /* Cursor pointer para todos os botões */
         button,
         .cursor-pointer,
         [role="button"],
@@ -188,7 +188,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
                         </div>
-                        <h2 class="text-xl font-bold text-gray-800 dark:text-white">NotificaÃ§Ãµes</h2>
+                        <h2 class="text-xl font-bold text-gray-800 dark:text-white">Notificações</h2>
                     </div>
                 </div>
                 
@@ -198,7 +198,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Gerenciar NotificaÃ§Ãµes
+                            Gerenciar Notificações
                         </a>
                     </nav>
                 </div>
@@ -212,15 +212,15 @@
                 <div class="mb-8 animate-in">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Gerenciar NotificaÃ§Ãµes</h1>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">VisÃ£o geral do sistema de notificaÃ§Ãµes</p>
+                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Gerenciar Notificações</h1>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Visão geral do sistema de notificações</p>
                         </div>
                         <div class="flex gap-3">
                             <button class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg shadow-sm transition-all duration-200 flex items-center space-x-2 cursor-pointer btn-hover" @click="$dispatch('open-modal', 'createModal')">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                                 </svg>
-                                <span>Nova NotificaÃ§Ã£o</span>
+                                <span>Nova Notificação</span>
                             </button>
                         </div>
                     </div>
@@ -269,7 +269,7 @@
                         <!-- Unread -->
                         <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">NÃ£o Lidas</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Não Lidas</p>
                                 <h3 class="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mt-1">{{ $stats['unread'] }}</h3>
                             </div>
                             <div class="p-3 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg">
@@ -298,18 +298,18 @@
                         <form id="filterForm" method="GET" action="{{ route('notifications.index') }}">
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div class="col-span-1 md:col-span-2">
-                                    <label for="search_title" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wider">Buscar TÃ­tulo</label>
+                                    <label for="search_title" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wider">Buscar Título</label>
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                                             </svg>
                                         </div>
-                                        <input type="text" class="pl-9 w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200" id="search_title" name="search_title" value="{{ request('search_title') }}" placeholder="Buscar por tÃ­tulo...">
+                                        <input type="text" class="pl-9 w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200" id="search_title" name="search_title" value="{{ request('search_title') }}" placeholder="Buscar por título...">
                                     </div>
                                 </div>
                                 <div>
-                                    <label for="user_id" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wider">UsuÃ¡rio</label>
+                                    <label for="user_id" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wider">Usuário</label>
                                     <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="user_id" name="user_id">
                                         <option value="">Todos</option>
                                         @foreach ($users as $user)
@@ -321,7 +321,7 @@
                                     <label for="type" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wider">Tipo</label>
                                     <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="type" name="type">
                                         <option value="">Todos</option>
-                                        <option value="info" {{ request('type') == 'info' ? 'selected' : '' }}>InformaÃ§Ã£o</option>
+                                        <option value="info" {{ request('type') == 'info' ? 'selected' : '' }}>Informação</option>
                                         <option value="success" {{ request('type') == 'success' ? 'selected' : '' }}>Sucesso</option>
                                         <option value="warning" {{ request('type') == 'warning' ? 'selected' : '' }}>Aviso</option>
                                         <option value="error" {{ request('type') == 'error' ? 'selected' : '' }}>Erro</option>
@@ -346,14 +346,14 @@
                     </div>
                 </div>
                 
-                <!-- Tabela de NotificaÃ§Ãµes -->
+                <!-- Tabela de Notificações -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden animate-in">
                     <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-600 flex items-center justify-between">
                         <h5 class="font-semibold text-gray-700 dark:text-gray-300 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
-                            NotificaÃ§Ãµes
+                            Notificações
                         </h5>
                         <span class="text-sm text-gray-500 dark:text-gray-400">{{ $notifications->total() }} itens</span>
                     </div>
@@ -365,7 +365,7 @@
         </div>
     </div>
     
-    <!-- Modal de CriaÃ§Ã£o -->
+    <!-- Modal de Criação -->
     <div id="createModal" x-data="{ open: false }" x-show="open" @open-modal.window="if ($event.detail === 'createModal') open = true" @close-modal.window="if ($event.detail === 'createModal') open = false" @keydown.escape.window="open = false" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="fixed inset-0 glass-modal transition-opacity" x-show="open" @click="open = false"></div>
@@ -386,7 +386,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        Criar Nova NotificaÃ§Ã£o
+                        Criar Nova Notificação
                     </h5>
                     <button type="button" @click="open = false" class="text-gray-400 hover:text-gray-500 focus:outline-none rounded-full p-2 hover:bg-gray-100/50 dark:hover:bg-gray-700/50 transition-all duration-200 cursor-pointer">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -402,15 +402,15 @@
                         @csrf
                         
                         <div>
-                            <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">TÃ­tulo *</label>
-                            <input type="text" class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200" id="title" name="title" required placeholder="Digite o tÃ­tulo da notificaÃ§Ã£o">
+                            <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Título *</label>
+                            <input type="text" class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200" id="title" name="title" required placeholder="Digite o título da notificação">
                             <p id="title-error" class="text-red-500 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div>
                             <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mensagem *</label>
                             <div id="quill-editor-container" style="height: 150px;" class="mb-1 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-700/50 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 focus-within:bg-white dark:focus-within:bg-gray-700 transition-all duration-200">
-                                <!-- Quill editor serÃ¡ inicializado aqui via JavaScript -->
+                                <!-- Quill editor será inicializado aqui via JavaScript -->
                             </div>
                             <input type="hidden" id="message" name="message" required>
                             <p id="message-error" class="text-red-500 text-sm mt-1 hidden"></p>
@@ -421,7 +421,7 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo *</label>
                                 <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="type" name="type" required>
                                     <option value="">Selecione o tipo</option>
-                                    <option value="info">InformaÃ§Ã£o</option>
+                                    <option value="info">Informação</option>
                                     <option value="success">Sucesso</option>
                                     <option value="warning">Aviso</option>
                                     <option value="error">Erro</option>
@@ -430,9 +430,9 @@
                             </div>
                             
                             <div>
-                                <label for="recipientUser" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">UsuÃ¡rio (opcional)</label>
+                                <label for="recipientUser" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Usuário (opcional)</label>
                                 <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="recipientUser" name="user_id">
-                                    <option value="">Todos os usuÃ¡rios</option>
+                                    <option value="">Todos os usuários</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->{$nameColumn} }}</option>
                                     @endforeach
@@ -443,7 +443,7 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL de AÃ§Ã£o (opcional)</label>
+                                <label for="url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL de Ação (opcional)</label>
                                 <input type="url" class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200" id="url" name="action_url" placeholder="https://exemplo.com/acao">
                                 <p id="url-error" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
@@ -462,14 +462,14 @@
                 
                 <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 backdrop-blur-sm flex justify-end space-x-3 border-t border-gray-200/30 dark:border-gray-700/30">
                     <button type="button" @click="open = false" class="px-4 py-2 bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-600/50 dark:hover:bg-gray-500/50 text-gray-800 dark:text-white rounded-lg transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Cancelar</button>
-                    <button type="submit" form="notificationForm" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Criar NotificaÃ§Ã£o</button>
+                    <button type="submit" form="notificationForm" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Criar Notificação</button>
                 </div>
             </div>
         </div>
     </div>
 
     
-    <!-- Modal de EdiÃ§Ã£o -->
+    <!-- Modal de Edição -->
     <div id="editModal" x-data="{ open: false }" x-show="open" @open-modal.window="if ($event.detail === 'editModal') open = true" @keydown.escape.window="open = false" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="fixed inset-0 glass-modal transition-opacity" x-show="open" @click="open = false"></div>
@@ -490,7 +490,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                         </div>
-                        Editar NotificaÃ§Ã£o
+                        Editar Notificação
                     </h5>
                     <button type="button" @click="open = false" class="text-gray-400 hover:text-gray-500 focus:outline-none rounded-full p-2 hover:bg-gray-100/50 dark:hover:bg-gray-700/50 transition-all duration-200 cursor-pointer">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -506,15 +506,15 @@
                         @csrf
                         
                         <div>
-                            <label for="edit_title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">TÃ­tulo *</label>
-                            <input type="text" class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200" id="edit_title" name="title" required placeholder="Digite o tÃ­tulo da notificaÃ§Ã£o">
+                            <label for="edit_title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Título *</label>
+                            <input type="text" class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200" id="edit_title" name="title" required placeholder="Digite o título da notificação">
                             <p id="edit_title-error" class="text-red-500 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div>
                             <label for="edit_message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mensagem *</label>
                             <div id="edit-quill-editor-container" style="height: 150px;" class="mb-1 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-700/50 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 focus-within:bg-white dark:focus-within:bg-gray-700 transition-all duration-200">
-                                <!-- Quill editor serÃ¡ inicializado aqui via JavaScript -->
+                                <!-- Quill editor será inicializado aqui via JavaScript -->
                             </div>
                             <input type="hidden" id="edit_message" name="message" required>
                             <p id="edit_message-error" class="text-red-500 text-sm mt-1 hidden"></p>
@@ -525,7 +525,7 @@
                                 <label for="edit_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo *</label>
                                 <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="edit_type" name="type" required>
                                     <option value="">Selecione o tipo</option>
-                                    <option value="info">InformaÃ§Ã£o</option>
+                                    <option value="info">Informação</option>
                                     <option value="success">Sucesso</option>
                                     <option value="warning">Aviso</option>
                                     <option value="error">Erro</option>
@@ -534,9 +534,9 @@
                             </div>
                             
                             <div>
-                                <label for="edit_recipientUser" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">UsuÃ¡rio (opcional)</label>
+                                <label for="edit_recipientUser" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Usuário (opcional)</label>
                                 <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="edit_recipientUser" name="user_id">
-                                    <option value="">Todos os usuÃ¡rios</option>
+                                    <option value="">Todos os usuários</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->{$nameColumn} }}</option>
                                     @endforeach
@@ -547,7 +547,7 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="edit_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL de AÃ§Ã£o (opcional)</label>
+                                <label for="edit_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL de Ação (opcional)</label>
                                 <input type="url" class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200" id="edit_url" name="action_url" placeholder="https://exemplo.com/acao">
                                 <p id="edit_url-error" class="text-red-500 text-sm mt-1 hidden"></p>
                             </div>
@@ -566,13 +566,13 @@
                 
                 <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 backdrop-blur-sm flex justify-end space-x-3 border-t border-gray-200/30 dark:border-gray-700/30">
                     <button type="button" @click="open = false" class="px-4 py-2 bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-600/50 dark:hover:bg-gray-500/50 text-gray-800 dark:text-white rounded-lg transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Cancelar</button>
-                    <button type="submit" form="editNotificationForm" class="px-4 py-2 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Salvar AlteraÃ§Ãµes</button>
+                    <button type="submit" form="editNotificationForm" class="px-4 py-2 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white rounded-lg shadow-sm transition-all duration-200 cursor-pointer btn-hover backdrop-blur-sm">Salvar Alterações</button>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Modal de ConfirmaÃ§Ã£o de ExclusÃ£o -->
+    <!-- Modal de Confirmação de Exclusão -->
     <div id="deleteModal" x-data="{ open: false }" x-show="open" @open-modal.window="if ($event.detail === 'deleteModal') open = true" @keydown.escape.window="open = false" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="fixed inset-0 glass-modal transition-opacity" x-show="open" @click="open = false"></div>
@@ -593,7 +593,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                         </div>
-                        Confirmar ExclusÃ£o
+                        Confirmar Exclusão
                     </h5>
                     <button type="button" @click="open = false" class="text-gray-400 hover:text-gray-500 focus:outline-none rounded-full p-2 hover:bg-gray-100/50 dark:hover:bg-gray-700/50 transition-all duration-200 cursor-pointer">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -612,8 +612,8 @@
                             </div>
                         </div>
                         <div class="flex-1">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Excluir NotificaÃ§Ã£o</h3>
-                            <p class="text-gray-600 dark:text-gray-300">Tem certeza que deseja excluir esta notificaÃ§Ã£o? Esta aÃ§Ã£o nÃ£o pode ser desfeita e a notificaÃ§Ã£o serÃ¡ removida permanentemente.</p>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Excluir Notificação</h3>
+                            <p class="text-gray-600 dark:text-gray-300">Tem certeza que deseja excluir esta notificação? Esta ação não pode ser desfeita e a notificação será removida permanentemente.</p>
                         </div>
                     </div>
                     <input type="hidden" id="delete_notification_id">
@@ -632,7 +632,7 @@
         </div>
     </div>
 
-    <!-- Modal de VisualizaÃ§Ã£o -->
+    <!-- Modal de Visualização -->
     <div id="viewModal" x-data="{ open: false }" x-show="open" @open-modal.window="if ($event.detail === 'viewModal') open = true" @keydown.escape.window="open = false" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="fixed inset-0 glass-modal transition-opacity" x-show="open" @click="open = false"></div>
@@ -654,7 +654,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                             </svg>
                         </div>
-                        Detalhes da NotificaÃ§Ã£o
+                        Detalhes da Notificação
                     </h5>
                     <button type="button" @click="open = false" class="text-gray-400 hover:text-gray-500 focus:outline-none rounded-full p-2 hover:bg-gray-100/50 dark:hover:bg-gray-700/50 transition-all duration-200 cursor-pointer">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -679,9 +679,9 @@
                     </div>
                     
                     <div>
-                        <h3 id="view_title" class="text-xl font-bold text-gray-900 dark:text-white mb-2">TÃ­tulo da NotificaÃ§Ã£o</h3>
+                        <h3 id="view_title" class="text-xl font-bold text-gray-900 dark:text-white mb-2">Título da Notificação</h3>
                         <div class="prose dark:prose-invert max-w-none bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-100 dark:border-gray-700/50">
-                            <div id="view_message">ConteÃºdo da mensagem...</div>
+                            <div id="view_message">Conteúdo da mensagem...</div>
                         </div>
                     </div>
                     
@@ -692,11 +692,11 @@
                                 <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
-                                Nome do UsuÃ¡rio
+                                Nome do Usuário
                             </span>
                         </div>
                         <div id="view_url_container" style="display: none;">
-                            <span class="block font-medium text-gray-900 dark:text-white mb-1">URL de AÃ§Ã£o:</span>
+                            <span class="block font-medium text-gray-900 dark:text-white mb-1">URL de Ação:</span>
                             <a id="view_url" href="#" target="_blank" class="flex items-center text-blue-600 hover:text-blue-500 hover:underline truncate">
                                 <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -745,7 +745,7 @@
     </script>
 
     <script>
-        // Configurar AJAX para enviar o token CSRF em todas as requisiÃ§Ãµes
+        // Configurar AJAX para enviar o token CSRF em todas as requisições
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -753,12 +753,12 @@
         });
         
         $(document).ready(function() {
-            // Visualizar notificaÃ§Ã£o
+            // Visualizar notificação
             $(document).on('click', '.view-notification', function() {
                 const notificationId = $(this).attr('data-id') || $(this).closest('tr').find('.edit-notification').data('id');
                 const $btn = $(this);
                 
-                // Mudar Ã­cone para loading
+                // Mudar ícone para loading
                 const originalContent = $btn.html();
                 $btn.html('<svg class="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>');
                 $btn.prop('disabled', true);
@@ -774,7 +774,7 @@
                             $('#view_id').val(n.id);
                             $('#view_title').text(n.title);
                             
-                            // Renderiza HTML da mensagem com seguranÃ§a
+                            // Renderiza HTML da mensagem com segurança
                             // Suporta Quill JSON ou HTML puro
                             try {
                                 const delta = JSON.parse(n.message);
@@ -799,7 +799,7 @@
                             };
                             
                             const typeLabels = {
-                                'info': 'InformaÃ§Ã£o',
+                                'info': 'Informação',
                                 'success': 'Sucesso',
                                 'warning': 'Aviso',
                                 'error': 'Erro'
@@ -811,16 +811,16 @@
                                 .text(typeLabels[n.type] || n.type);
                                 
                             $('#view_status')
-                                .text(n.read_at ? 'Lida' : 'NÃ£o lida')
+                                .text(n.read_at ? 'Lida' : 'Não lida')
                                 .removeClass()
                                 .addClass(n.read_at ? 'text-green-600 dark:text-green-400 font-medium' : 'text-blue-600 dark:text-blue-400 font-medium');
 
-                            // UsuÃ¡rio
+                            // Usuário
                             $('#view_user').html(`
                                 <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
-                                ${n.user_name || n.user?.{{ config('notifications.user_columns.name', 'name') }} || 'Todos os usuÃ¡rios'}
+                                ${n.user_name || n.user?.{{ config('notifications.user_columns.name', 'name') }} || 'Todos os usuários'}
                             `);
 
                             // URL
@@ -838,7 +838,7 @@
                         }
                     },
                     error: function() {
-                        showAlert('danger', 'Erro ao carregar detalhes da notificaÃ§Ã£o.');
+                        showAlert('danger', 'Erro ao carregar detalhes da notificação.');
                     },
                     complete: function() {
                         $btn.html(originalContent);
@@ -847,12 +847,12 @@
                 });
             });
 
-            // Alpine.js jÃ¡ gerencia os modais, nÃ£o precisamos inicializÃ¡-los com Bootstrap
+            // Alpine.js já gerencia os modais, não precisamos inicializá-los com Bootstrap
             
-            // Inicializar Quill Editor para criaÃ§Ã£o
+            // Inicializar Quill Editor para criação
             var quillCreate = new Quill('#quill-editor-container', {
                 theme: 'snow',
-                placeholder: 'Digite a mensagem da notificaÃ§Ã£o...',
+                placeholder: 'Digite a mensagem da notificação...',
                 modules: {
                     toolbar: [
                         ['bold', 'italic', 'underline', 'strike'],
@@ -865,10 +865,10 @@
                 }
             });
             
-            // Inicializar Quill Editor para ediÃ§Ã£o
+            // Inicializar Quill Editor para edição
             var quillEdit = new Quill('#edit-quill-editor-container', {
                 theme: 'snow',
-                placeholder: 'Digite a mensagem da notificaÃ§Ã£o...',
+                placeholder: 'Digite a mensagem da notificação...',
                 modules: {
                     toolbar: [
                         ['bold', 'italic', 'underline', 'strike'],
@@ -881,7 +881,7 @@
                 }
             });
             
-            // Atualizar campo hidden quando o conteÃºdo do editor mudar
+            // Atualizar campo hidden quando o conteúdo do editor mudar
             quillCreate.on('text-change', function() {
                 $('#message').val(quillCreate.root.innerHTML);
             });
@@ -890,11 +890,11 @@
                 $('#edit_message').val(quillEdit.root.innerHTML);
             });
             
-            // FormulÃ¡rio de criaÃ§Ã£o
+            // Formulário de criação
             $('#createModal form').on('submit', function(e) {
                 e.preventDefault();
                 
-                // Garantir que o conteÃºdo do Quill Editor seja capturado
+                // Garantir que o conteúdo do Quill Editor seja capturado
                 $('#message').val(quillCreate.root.innerHTML);
                 
                 const formData = $(this).serialize();
@@ -919,14 +919,14 @@
                 });
             });
             
-            // Editar notificaÃ§Ã£o
+            // Editar notificação
             $(document).on('click', '.edit-notification', function() {
                 const notificationId = $(this).data('id');
                 
                 // Limpar erros anteriores
                 clearFormErrors();
                 
-                // Carregar dados da notificaÃ§Ã£o
+                // Carregar dados da notificação
                 $.ajax({
                     url: `/notifications/${notificationId}`,
                     type: 'GET',
@@ -935,17 +935,17 @@
                         if (response.success) {
                             const notification = response.notification;
                             
-                            // Preencher o formulÃ¡rio
+                            // Preencher o formulário
                             $('#edit_notification_id').val(notification.id);
                             $('#edit_title').val(notification.title);
                             $('#edit_message').val(notification.message);
                             $('#edit_type').val(notification.type);
                             $('#edit_recipientUser').val(notification.user_id || '');
                             $('#edit_url').val(notification.action_url || '');
-                            // Definir o tipo de processamento como imediato por padrÃ£o
+                            // Definir o tipo de processamento como imediato por padrão
                             $('#edit_processing_type').val('immediate');
                             
-                            // Atualizar o conteÃºdo do Quill Editor
+                            // Atualizar o conteúdo do Quill Editor
                             setTimeout(function() {
                                 quillEdit.root.innerHTML = notification.message;
                             }, 300); // Pequeno delay para garantir que o editor esteja inicializado
@@ -957,11 +957,11 @@
                 });
             });
             
-            // FormulÃ¡rio de ediÃ§Ã£o
+            // Formulário de edição
             $('#editNotificationForm').on('submit', function(e) {
                 e.preventDefault();
                 
-                // Garantir que o conteÃºdo do Quill Editor seja capturado
+                // Garantir que o conteúdo do Quill Editor seja capturado
                 $('#edit_message').val(quillEdit.root.innerHTML);
                 
                 const notificationId = $('#edit_notification_id').val();
@@ -986,14 +986,14 @@
                 });
             });
             
-            // Excluir notificaÃ§Ã£o
+            // Excluir notificação
             $(document).on('click', '.delete-notification', function() {
                 const notificationId = $(this).data('id');
                 $('#delete_notification_id').val(notificationId);
                 window.dispatchEvent(new CustomEvent('open-modal', { detail: 'deleteModal' }));
             });
             
-            // Confirmar exclusÃ£o
+            // Confirmar exclusão
             $('#confirmDelete').on('click', function() {
                 const notificationId = $('#delete_notification_id').val();
                 
@@ -1012,7 +1012,7 @@
                         }
                     },
                     error: function() {
-                        showAlert('danger', 'Erro ao excluir notificaÃ§Ã£o');
+                        showAlert('danger', 'Erro ao excluir notificação');
                     }
                 });
             });
@@ -1023,9 +1023,9 @@
                 refreshNotificationsTable($(this).serialize());
             });
             
-            // Excluir todas as notificaÃ§Ãµes
+            // Excluir todas as notificações
             $(document).on('click', '#delete-all-notifications', function() {
-                if (confirm('Tem certeza que deseja excluir todas as notificaÃ§Ãµes?')) {
+                if (confirm('Tem certeza que deseja excluir todas as notificações?')) {
                     $.ajax({
                         url: '{{ route("notifications.destroy.all") }}',
                         type: 'DELETE',
@@ -1040,7 +1040,7 @@
                             }
                         },
                         error: function() {
-                            showAlert('danger', 'Erro ao excluir todas as notificaÃ§Ãµes');
+                            showAlert('danger', 'Erro ao excluir todas as notificações');
                         }
                     });
                 }
@@ -1054,11 +1054,11 @@
                 });
 
                 if (ids.length === 0) {
-                    alert('Nenhuma notificaÃ§Ã£o selecionada.');
+                    alert('Nenhuma notificação selecionada.');
                     return;
                 }
 
-                if (confirm('Tem certeza que deseja excluir as ' + ids.length + ' notificaÃ§Ãµes selecionadas?')) {
+                if (confirm('Tem certeza que deseja excluir as ' + ids.length + ' notificações selecionadas?')) {
                     $.ajax({
                         url: '{{ route("notifications.destroy.selected") }}',
                         type: 'POST',
@@ -1074,13 +1074,13 @@
                             }
                         },
                         error: function() {
-                            showAlert('danger', 'Erro ao excluir notificaÃ§Ãµes selecionadas');
+                            showAlert('danger', 'Erro ao excluir notificações selecionadas');
                         }
                     });
                 }
             });
             
-            // FunÃ§Ãµes auxiliares
+            // Funções auxiliares
             function refreshNotificationsTable(filterParams = '') {
                 $.ajax({
                     url: '{{ route("notifications.index") }}' + (filterParams ? '?' + filterParams : ''),
@@ -1128,7 +1128,7 @@
             }
 
             function showAlert(type, message, title = '') {
-                // Definir cores e Ã­cones baseados no tipo
+                // Definir cores e ícones baseados no tipo
                 let colors = {
                     success: { border: 'border-green-500', icon: 'text-green-500', bg: 'bg-green-500' },
                     danger: { border: 'border-red-500', icon: 'text-red-500', bg: 'bg-red-500' },
@@ -1139,7 +1139,7 @@
                 // Fallback para info se tipo desconhecido
                 let style = colors[type] || colors.info;
                 
-                // Ãcones SVG
+                // Ícones SVG
                 let icons = {
                     success: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
                     danger: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
@@ -1158,7 +1158,7 @@
                                     ${icon}
                                 </div>
                                 <div class="ml-3 w-0 flex-1 pt-0.5">
-                                    <p class="text-sm font-medium text-gray-900 dark:text-white">${title || (type === 'danger' ? 'Erro' : (type === 'success' ? 'Sucesso' : 'InformaÃ§Ã£o'))}</p>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">${title || (type === 'danger' ? 'Erro' : (type === 'success' ? 'Sucesso' : 'Informação'))}</p>
                                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 break-words">${message}</p>
                                 </div>
                                 <div class="ml-4 flex flex-shrink-0">
@@ -1187,7 +1187,7 @@
                 }, 5000);
             }
             
-            // Tornar a funÃ§Ã£o global para ser acessada pelo botÃ£o de fechar inline
+            // Tornar a função global para ser acessada pelo botão de fechar inline
             window.destroyToast = function(id) {
                 let $toast = $(`#${id}`);
                 $toast.addClass('translate-x-full opacity-0');
@@ -1196,11 +1196,11 @@
                 }, 300);
             };
 
-            // FormulÃ¡rio de criaÃ§Ã£o
+            // Formulário de criação
              $('#createModal form').on('submit', function(e) {
                 e.preventDefault();
                 
-                // Garantir que o conteÃºdo do Quill Editor seja capturado
+                // Garantir que o conteúdo do Quill Editor seja capturado
                 $('#message').val(quillCreate.root.innerHTML);
                 
                 const formData = $(this).serialize();

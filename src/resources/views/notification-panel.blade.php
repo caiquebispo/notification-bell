@@ -431,7 +431,7 @@
                             
                             <div>
                                 <label for="recipientUser" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Usuário (opcional)</label>
-                                <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="recipientUser" name="user_id">
+                                <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="recipientUser" name="recipientUser">
                                     <option value="">Todos os usuários</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->{$nameColumn} }}</option>
@@ -535,7 +535,7 @@
                             
                             <div>
                                 <label for="edit_recipientUser" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Usuário (opcional)</label>
-                                <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="edit_recipientUser" name="user_id">
+                                <select class="w-full px-4 py-2.5 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer transition-all duration-200" id="edit_recipientUser" name="recipientUser">
                                     <option value="">Todos os usuários</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->{$nameColumn} }}</option>

@@ -49,17 +49,24 @@ class QueryBudgetTest extends TestCase
             Livewire::actingAs($user)->test(NotificationBell::class);
         });
 
-        // Duas queries: contagem de não lidas e a lista. Nada de introspecção
-        // (a checagem de schema é otimista) e nada de preferências (carregadas
-        // sob demanda). Este é o custo que o site inteiro paga por página —
-        // qualquer aumento aqui multiplica por toda navegação do host.
-        $this->assertLessThanOrEqual(2, $cold, "Render frio usou {$cold} queries.");
+        // UMA query com o painel fechado — a contagem do badge. Sem
+        // introspecção de schema (verificação otimista), sem preferências
+        // (sob demanda) e sem a lista (só ao abrir o dropdown). Este é o
+        // custo que o site inteiro paga em toda navegação.
+        $this->assertLessThanOrEqual(1, $cold, "Render frio usou {$cold} queries.");
 
         $warm = $this->countQueries(function () use ($user) {
             Livewire::actingAs($user)->test(NotificationBell::class);
         });
 
-        $this->assertLessThanOrEqual(2, $warm, "Render quente usou {$warm} queries.");
+        $this->assertLessThanOrEqual(1, $warm, "Render quente usou {$warm} queries.");
+
+        // Abrir o dropdown: aí sim a lista é buscada.
+        $open = $this->countQueries(function () use ($user) {
+            Livewire::actingAs($user)->test(NotificationBell::class)->call('openPanel');
+        });
+
+        $this->assertLessThanOrEqual(3, $open, "Abrir o painel usou {$open} queries.");
     }
 
     public function test_query_count_does_not_grow_with_more_notifications(): void
@@ -71,7 +78,9 @@ class QueryBudgetTest extends TestCase
             $this->app['cache']->forget('notification-bell:schema-ready');
 
             return $this->countQueries(function () use ($user) {
-                Livewire::actingAs($user)->test(NotificationBell::class);
+                // Com o painel aberto: é o caminho que de fato lê a lista, e
+                // portanto o que poderia sofrer N+1.
+                Livewire::actingAs($user)->test(NotificationBell::class)->call('openPanel');
             });
         };
 

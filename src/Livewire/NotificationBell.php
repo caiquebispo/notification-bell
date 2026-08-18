@@ -23,6 +23,13 @@ class NotificationBell extends Component
     /** Aba ativa do dropdown: all | unread | archived */
     public string $tab = 'all';
 
+    /**
+     * Dropdown aberto. O Alpine controla a abertura visual no cliente e avisa
+     * o servidor aqui, para que o render de painel fechado (a esmagadora
+     * maioria) não pague a query da lista.
+     */
+    public bool $panelOpen = false;
+
     /** Painel de preferências aberto dentro do dropdown. */
     public bool $showPreferences = false;
 
@@ -62,6 +69,17 @@ class NotificationBell extends Component
         // banco ainda estiver na versão anterior (janela de deploy), o sino
         // degrada para vazio em vez de derrubar a página do host.
         $loaded = SchemaReadiness::attempt(function () use ($userId, $limit) {
+            // Painel fechado — o caso de TODA página do host — precisa só do
+            // número do badge. A lista custaria uma segunda query para um
+            // dropdown que ninguém está olhando; ela é buscada ao abrir
+            // (togglePanel) e a cada atualização com o painel já aberto.
+            if (!$this->panelOpen) {
+                return [
+                    'unread' => Notification::forBell($userId)->unread()->count(),
+                    'items' => null,
+                ];
+            }
+
             $query = match ($this->tab) {
                 'unread' => Notification::forBell($userId)->unread(),
                 'archived' => Notification::forUser($userId)
@@ -71,10 +89,16 @@ class NotificationBell extends Component
                 default => Notification::forBell($userId),
             };
 
-            return [
-                'unread' => Notification::forBell($userId)->unread()->count(),
-                'items' => $query->limit($limit)->get(),
-            ];
+            $items = $query->limit($limit)->get();
+
+            // A contagem sai da própria lista quando ela cabe inteira: na aba
+            // "não lidas" sem truncamento, contar de novo seria uma query
+            // redundante.
+            $unread = ($this->tab === 'unread' && $items->count() < $limit)
+                ? $items->count()
+                : Notification::forBell($userId)->unread()->count();
+
+            return ['unread' => $unread, 'items' => $items];
         }, null);
 
         if ($loaded === null) {
@@ -85,6 +109,11 @@ class NotificationBell extends Component
         }
 
         $this->unreadCount = $loaded['unread'];
+
+        if ($loaded['items'] === null) {
+            return;
+        }
+
         $this->notifications = $this->applyGrouping($loaded['items'])->toArray();
 
         $this->detectNewNotifications($loaded['items']);
@@ -171,6 +200,18 @@ class NotificationBell extends Component
     // -----------------------------------------------------------------
     // Ações sobre notificações
     // -----------------------------------------------------------------
+
+    /** Chamado pelo Alpine ao abrir o dropdown: aí sim a lista é buscada. */
+    public function openPanel()
+    {
+        $this->panelOpen = true;
+        $this->loadNotifications();
+    }
+
+    public function closePanel()
+    {
+        $this->panelOpen = false;
+    }
 
     public function setTab(string $tab)
     {

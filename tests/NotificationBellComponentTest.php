@@ -72,6 +72,7 @@ class NotificationBellComponentTest extends TestCase
 
         Livewire::actingAs($user)
             ->test(NotificationBell::class)
+            ->call('openPanel')
             ->call('setTab', 'archived')
             ->assertSee('Guardada')
             ->assertDontSee('Ativa');
@@ -154,6 +155,21 @@ class NotificationBellComponentTest extends TestCase
             ->call('clearAll');
 
         $this->assertNull($foreign->fresh()->deleted_at);
+    }
+
+    public function test_closed_panel_shows_the_badge_without_loading_the_list(): void
+    {
+        $user = $this->createUser();
+        $this->notify($user, ['title' => 'Segredo do dropdown']);
+
+        // Fechado: só o número do badge — a lista nem é consultada.
+        $component = Livewire::actingAs($user)
+            ->test(NotificationBell::class)
+            ->assertSet('unreadCount', 1)
+            ->assertSet('notifications', [])
+            ->assertDontSee('Segredo do dropdown');
+
+        $component->call('openPanel')->assertSee('Segredo do dropdown');
     }
 
     public function test_rendering_the_bell_never_writes_preferences(): void
@@ -239,7 +255,9 @@ class NotificationBellComponentTest extends TestCase
         }
         $this->notify($user, ['title' => 'Avulsa']);
 
-        $component = Livewire::actingAs($user)->test(NotificationBell::class);
+        $component = Livewire::actingAs($user)
+            ->test(NotificationBell::class)
+            ->call('openPanel');
 
         $this->assertCount(2, $component->get('notifications'));
     }

@@ -33,6 +33,23 @@
     style="{{ Theme::inlineVariables() }}"
     x-data="{
         confirmClear: false,
+
+        // Abrir o dropdown avisa o servidor: só então a lista é buscada. Com
+        // o painel fechado (toda página do host) o sino custa uma query.
+        togglePanel() {
+            this.open ? this.closePanel() : this.openPanel();
+        },
+        openPanel() {
+            this.open = true;
+            $wire.openPanel();
+        },
+        closePanel() {
+            if (!this.open) return;
+            this.open = false;
+            this.confirmClear = false;
+            $wire.closePanel();
+        },
+
         injectStyles() {
             if (document.getElementById('nb-styles')) return;
             const link = document.createElement('link');
@@ -173,13 +190,12 @@
         },
     }"
     x-init="injectStyles(); initEcho()"
-    x-effect="if (!open) confirmClear = false"
     x-on:new-notification.window="showToast($event.detail)"
     x-on:notification-deleted.window="showUndoToast($event.detail)"
     {{-- Recarrega ao receber broadcast; o toast/som sai do detector de novas
          notificações do próprio loadNotifications, com os dados corretos. --}}
     x-on:nb-broadcast.window="$wire.loadNotifications()"
-    x-on:keydown.escape.window="modalOpen ? closeModal() : (open = false)"
+    x-on:keydown.escape.window="modalOpen ? closeModal() : closePanel()"
     @if($this->resolvePollingEnabled())
         wire:poll.{{ $this->resolvePollingInterval() }}="loadNotifications"
     @endif
@@ -220,7 +236,7 @@
     <button
         type="button"
         class="nb-trigger"
-        x-on:click="open = !open"
+        x-on:click="togglePanel()"
         aria-label="{{ $t('notifications') }}"
         aria-haspopup="true"
         :aria-expanded="open"
@@ -244,14 +260,14 @@
     </button>
 
     {{-- Backdrop mobile --}}
-    <div x-show="open" x-transition.opacity class="nb-backdrop" x-on:click="open = false" style="display: none;"></div>
+    <div x-show="open" x-transition.opacity class="nb-backdrop" x-on:click="closePanel()" style="display: none;"></div>
 
     {{-- Dropdown --}}
     <div
         x-show="open"
         x-transition:enter="nb-enter" x-transition:enter-start="nb-enter-start" x-transition:enter-end="nb-enter-end"
         x-transition:leave="nb-leave" x-transition:leave-start="nb-leave-start" x-transition:leave-end="nb-leave-end"
-        x-on:click.away="open = false"
+        x-on:click.away="closePanel()"
         class="nb-panel"
         style="display: none;"
     >

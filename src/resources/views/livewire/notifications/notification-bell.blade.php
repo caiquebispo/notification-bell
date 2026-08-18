@@ -47,10 +47,13 @@
         toasts: [],
         toastId: 0,
 
+        {{-- Preferências são carregadas sob demanda (ver mount): enquanto não
+             chegam, valem os padrões do config, que é o que a linha do banco
+             conteria de qualquer forma para quem nunca mexeu nelas. --}}
         prefs: @js([
-            'toasts' => $preferences['toasts_enabled'] ?? true,
-            'sound' => $preferences['sound_enabled'] ?? false,
-            'volume' => ($preferences['sound_volume'] ?? 50) / 100,
+            'toasts' => $preferences['toasts_enabled'] ?? config('notifications.features.toasts.enabled', true),
+            'sound' => $preferences['sound_enabled'] ?? config('notifications.features.sound.enabled', false),
+            'volume' => ($preferences['sound_volume'] ?? (config('notifications.features.sound.volume', 0.5) * 100)) / 100,
             'snoozed' => $preferences['is_snoozed'] ?? false,
         ]),
 

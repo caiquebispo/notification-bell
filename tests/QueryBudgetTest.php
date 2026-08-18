@@ -49,17 +49,17 @@ class QueryBudgetTest extends TestCase
             Livewire::actingAs($user)->test(NotificationBell::class);
         });
 
-        // Com schema em dia NÃO há introspecção nenhuma — nem no primeiro
-        // request. Sobram as 3 queries de negócio: preferências, contagem de
-        // não lidas e a lista. Se alguém reintroduzir uma verificação
-        // preventiva de schema, este número sobe e o host paga em cada página.
-        $this->assertLessThanOrEqual(3, $cold, "Render frio usou {$cold} queries.");
+        // Duas queries: contagem de não lidas e a lista. Nada de introspecção
+        // (a checagem de schema é otimista) e nada de preferências (carregadas
+        // sob demanda). Este é o custo que o site inteiro paga por página —
+        // qualquer aumento aqui multiplica por toda navegação do host.
+        $this->assertLessThanOrEqual(2, $cold, "Render frio usou {$cold} queries.");
 
         $warm = $this->countQueries(function () use ($user) {
             Livewire::actingAs($user)->test(NotificationBell::class);
         });
 
-        $this->assertLessThanOrEqual(3, $warm, "Render quente usou {$warm} queries.");
+        $this->assertLessThanOrEqual(2, $warm, "Render quente usou {$warm} queries.");
     }
 
     public function test_query_count_does_not_grow_with_more_notifications(): void

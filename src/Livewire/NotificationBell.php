@@ -37,7 +37,11 @@ class NotificationBell extends Component
 
     public function mount()
     {
-        $this->loadPreferences();
+        // Preferências NÃO são carregadas aqui: a esmagadora maioria dos
+        // renders é de quem só passa pela página sem abrir o sino. Elas são
+        // buscadas sob demanda — ao abrir o painel de preferências ou quando
+        // chega notificação nova (para decidir toast/som). Uma query a menos
+        // em cada página do host.
         $this->loadNotifications();
     }
 
@@ -142,10 +146,13 @@ class NotificationBell extends Component
         }
 
         if ($this->lastNotificationId !== null && $latest->id > $this->lastNotificationId) {
-            // Preferências mandam: nada de toast/som em snooze ou silêncio.
-            // O array vem do mount e sobrevive entre requests (estado do
-            // Livewire), então o poll não precisa reconsultar; se estiver
-            // vazio, o Alpine ainda faz a checagem no cliente.
+            // Só AQUI as preferências importam: chegou algo novo e é preciso
+            // saber se o usuário está em "não perturbe". Carregar sob demanda
+            // mantém o render comum (sem novidade) em duas queries.
+            if ($this->preferences === []) {
+                $this->loadPreferences();
+            }
+
             $snoozed = $this->preferences['is_snoozed'] ?? false;
 
             if (!$snoozed) {

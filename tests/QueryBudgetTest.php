@@ -42,28 +42,23 @@ class QueryBudgetTest extends TestCase
             ]);
         }
 
-        // Cache frio: a checagem de schema ainda não foi memoizada.
+        // Processo novo, como no primeiro request de um worker.
         SchemaReadiness::reset();
-        $this->app['cache']->forget('notification-bell:schema-ready');
 
         $cold = $this->countQueries(function () use ($user) {
             Livewire::actingAs($user)->test(NotificationBell::class);
         });
 
-        // Orçamento frio = 4 de introspecção + 3 de negócio.
-        // A introspecção é 1 chamada por tabela (notifications e
-        // notification_preferences), mas o SQLite gasta 2 queries em cada
-        // getColumnListing (pragma + sqlite_master); em MySQL/Postgres é
-        // menos. As 3 de negócio são o piso real: preferências, contagem de
-        // não lidas e a lista.
-        $this->assertLessThanOrEqual(7, $cold, "Render frio usou {$cold} queries.");
+        // Com schema em dia NÃO há introspecção nenhuma — nem no primeiro
+        // request. Sobram as 3 queries de negócio: preferências, contagem de
+        // não lidas e a lista. Se alguém reintroduzir uma verificação
+        // preventiva de schema, este número sobe e o host paga em cada página.
+        $this->assertLessThanOrEqual(3, $cold, "Render frio usou {$cold} queries.");
 
         $warm = $this->countQueries(function () use ($user) {
             Livewire::actingAs($user)->test(NotificationBell::class);
         });
 
-        // Quente, a introspecção sai do caminho (memoizada em cache) e sobram
-        // só as 3 de negócio — é isso que o host paga em toda página.
         $this->assertLessThanOrEqual(3, $warm, "Render quente usou {$warm} queries.");
     }
 

@@ -47,30 +47,43 @@ class NotificationBell extends Component
 
     public function loadNotifications()
     {
-        if (!auth()->check() || !SchemaReadiness::ready()) {
+        if (!auth()->check()) {
             return;
         }
 
         $userId = auth()->id();
-
-        $this->unreadCount = Notification::forBell($userId)->unread()->count();
-
         $limit = $this->limit ?? config('notifications.dropdown_limit', 10);
 
-        $query = match ($this->tab) {
-            'unread' => Notification::forBell($userId)->unread(),
-            'archived' => Notification::forUser($userId)
-                ->deliverable()
-                ->archived()
-                ->orderBy('archived_at', 'desc'),
-            default => Notification::forBell($userId),
-        };
+        // attempt(): o caminho feliz não paga checagem de schema alguma. Se o
+        // banco ainda estiver na versão anterior (janela de deploy), o sino
+        // degrada para vazio em vez de derrubar a página do host.
+        $loaded = SchemaReadiness::attempt(function () use ($userId, $limit) {
+            $query = match ($this->tab) {
+                'unread' => Notification::forBell($userId)->unread(),
+                'archived' => Notification::forUser($userId)
+                    ->deliverable()
+                    ->archived()
+                    ->orderBy('archived_at', 'desc'),
+                default => Notification::forBell($userId),
+            };
 
-        $notifications = $query->limit($limit)->get();
+            return [
+                'unread' => Notification::forBell($userId)->unread()->count(),
+                'items' => $query->limit($limit)->get(),
+            ];
+        }, null);
 
-        $this->notifications = $this->applyGrouping($notifications)->toArray();
+        if ($loaded === null) {
+            $this->unreadCount = 0;
+            $this->notifications = [];
 
-        $this->detectNewNotifications($notifications);
+            return;
+        }
+
+        $this->unreadCount = $loaded['unread'];
+        $this->notifications = $this->applyGrouping($loaded['items'])->toArray();
+
+        $this->detectNewNotifications($loaded['items']);
     }
 
     /**
@@ -280,7 +293,7 @@ class NotificationBell extends Component
 
     public function loadPreferences(): void
     {
-        if (!auth()->check() || !config('notifications.preferences.enabled', true) || !SchemaReadiness::ready()) {
+        if (!auth()->check() || !config('notifications.preferences.enabled', true)) {
             $this->preferences = [];
 
             return;
@@ -288,7 +301,16 @@ class NotificationBell extends Component
 
         // readForUser: leitura pura. Renderizar o sino não pode escrever no
         // banco — isso rodaria em toda página, para todo visitante logado.
-        $preference = NotificationPreference::readForUser(auth()->id());
+        $preference = SchemaReadiness::attempt(
+            fn () => NotificationPreference::readForUser(auth()->id()),
+            null
+        );
+
+        if ($preference === null) {
+            $this->preferences = [];
+
+            return;
+        }
 
         $this->preferences = [
             'toasts_enabled' => $preference->toasts_enabled,

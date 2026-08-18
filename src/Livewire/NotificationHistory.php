@@ -67,6 +67,7 @@ class NotificationHistory extends Component
             return collect();
         }
 
+        /** @var \Illuminate\Database\Eloquent\Builder<Notification> $query */
         $query = Notification::forUser(auth()->id())
             ->search($this->search ?: null)
             ->orderByRaw('CASE WHEN pinned_at IS NULL THEN 1 ELSE 0 END')

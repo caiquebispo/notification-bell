@@ -2,7 +2,6 @@
 
 namespace CaiqueBispo\NotificationBell\Support;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
@@ -11,69 +10,88 @@ use Illuminate\Support\Facades\Schema;
  * existe uma janela em que o código espera colunas que ainda não existem.
  * O sino aparece em todas as páginas — ele deve degradar para vazio,
  * nunca derrubar a página com uma QueryException.
+ *
+ * A verificação é OTIMISTA: o caminho normal (schema em dia) não paga NADA,
+ * porque nada é checado antecipadamente. Só quando uma query realmente falha
+ * é que se investiga o schema — e aí o resultado fica memoizado no processo.
+ * O inverso (checar antes, em toda página) custava introspecção a cada
+ * request sempre que o cache estivesse frio, e o sino renderiza no site
+ * inteiro.
  */
 class SchemaReadiness
 {
-    private const CACHE_KEY = 'notification-bell:schema-ready';
-
     private static ?bool $ready = null;
 
-    public static function ready(): bool
+    /**
+     * Executa uma leitura do sino tolerante a schema desatualizado.
+     *
+     * @template T
+     * @param  callable(): T  $callback
+     * @param  T  $fallback  Valor devolvido quando o schema não está pronto.
+     * @return T
+     */
+    public static function attempt(callable $callback, $fallback)
     {
-        if (self::$ready === true) {
-            return true;
+        if (self::$ready === false) {
+            return $fallback;
         }
 
         try {
-            // Só o estado "pronto" é cacheado: enquanto o schema estiver
-            // incompleto, recheca a cada request para reagir ao migrate
-            // imediatamente.
-            if (Cache::get(self::CACHE_KEY) === true) {
-                return self::$ready = true;
-            }
+            $result = $callback();
+            self::$ready = true;
 
-            // Uma única query de introspecção, não seis: getColumnListing já
-            // traz todas as colunas da tabela, e hasTable('notification_
-            // preferences') é dispensável — só a coluna interessa, e ela não
-            // existe sem a tabela. O sino renderiza em TODA página do host:
-            // cada query aqui é paga pelo site inteiro.
-            $columns = Schema::getColumnListing('notifications');
-
-            $isReady = in_array('deleted_at', $columns, true)
-                && in_array('archived_at', $columns, true)
-                && in_array(
-                    'toasts_enabled',
-                    Schema::getColumnListing('notification_preferences'),
-                    true
-                );
-
-            if ($isReady) {
-                Cache::put(self::CACHE_KEY, true, now()->addDay());
-
-                return self::$ready = true;
-            }
-
-            self::warnOnce();
-
-            return self::$ready = false;
+            return $result;
         } catch (\Throwable $e) {
-            // Sem banco disponível (deploy, testes de view isolados, etc.):
-            // degradar em silêncio.
-            return self::$ready = false;
+            // Falhou: pode ser schema desatualizado (janela de deploy) ou um
+            // erro real de banco. Só o primeiro caso é degradável.
+            if (self::schemaIsStale()) {
+                self::$ready = false;
+                self::warnOnce();
+
+                return $fallback;
+            }
+
+            throw $e;
         }
     }
 
     /**
-     * Permite aos testes e ao migrate forçar a reavaliação.
+     * Estado conhecido do schema. Sem chamada prévia a attempt(), investiga
+     * uma vez — usado por caminhos que não têm uma query para embrulhar.
      */
+    public static function ready(): bool
+    {
+        if (self::$ready !== null) {
+            return self::$ready;
+        }
+
+        return self::$ready = !self::schemaIsStale();
+    }
+
+    /** Permite aos testes e ao migrate forçar a reavaliação. */
     public static function reset(): void
     {
         self::$ready = null;
+    }
 
+    private static function schemaIsStale(): bool
+    {
         try {
-            Cache::forget(self::CACHE_KEY);
+            $columns = Schema::getColumnListing('notifications');
+
+            if (!in_array('deleted_at', $columns, true) || !in_array('archived_at', $columns, true)) {
+                return true;
+            }
+
+            return !in_array(
+                'toasts_enabled',
+                Schema::getColumnListing('notification_preferences'),
+                true
+            );
         } catch (\Throwable $e) {
-            // Cache indisponível — o estado estático já foi limpo.
+            // Sem banco disponível (deploy, build de assets, testes de view
+            // isolados): tratar como não pronto e degradar em silêncio.
+            return true;
         }
     }
 

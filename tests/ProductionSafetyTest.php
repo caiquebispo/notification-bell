@@ -69,9 +69,12 @@ class ProductionSafetyTest extends TestCase
 
         $this->assertFalse(SchemaReadiness::ready());
 
-        // O migrate roda: o estado "não pronto" não é cacheado, então a
-        // recuperação é imediata no request seguinte.
         (require glob(__DIR__ . '/../src/database/migrations/*notification_preferences*.php')[0])->up();
+
+        // Nada é persistido em cache: o estado vive só no processo PHP, então
+        // o request seguinte (novo processo/worker) já enxerga o schema novo.
+        // Aqui o reset() simula essa fronteira de request.
+        SchemaReadiness::reset();
 
         $this->assertTrue(SchemaReadiness::ready());
     }

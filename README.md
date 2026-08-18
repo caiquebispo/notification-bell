@@ -9,6 +9,12 @@ An elegant, framework-agnostic Laravel package for managing notifications with L
   <a href="https://packagist.org/packages/caiquebispo/notification-bell"><img src="http://poser.pugx.org/caiquebispo/notification-bell/license" alt="License"></a>
   <a href="https://packagist.org/packages/caiquebispo/notification-bell"><img src="http://poser.pugx.org/caiquebispo/notification-bell/require/php" alt="PHP Version Require"></a>
 </p>
+<img width="1907" height="912" alt="image" src="https://github.com/user-attachments/assets/a72ac984-1afc-481b-a617-8903e399dd77" />
+<img width="1516" height="927" alt="image" src="https://github.com/user-attachments/assets/08b259cd-a7ef-430c-b37b-416d68e25234" />
+<img width="1369" height="719" alt="image" src="https://github.com/user-attachments/assets/53bcb68b-18c7-4b14-9204-baeb9f96fc47" />
+<img width="1329" height="790" alt="image" src="https://github.com/user-attachments/assets/24df7c86-d966-40a2-83b7-7ec86fa05646" />
+<img width="1027" height="910" alt="image" src="https://github.com/user-attachments/assets/6c7fe882-6151-49e5-b2c8-792ee315bf8a" />
+
 
 ## Highlights
 

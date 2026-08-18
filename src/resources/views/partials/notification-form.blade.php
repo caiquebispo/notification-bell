@@ -1,51 +1,99 @@
 @php($nameColumn = $nameColumn ?? config('notifications.user_columns.name', 'name'))
-<form id="notificationForm" method="POST" class="space-y-4">
-    @csrf
-    <input type="hidden" name="_method" id="formMethod" value="POST">
-    <input type="hidden" name="notification_id" id="notification_id" value="">
-    
-    <div>
-        <label for="recipientUser" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Usuário</label>
-        <select class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50" id="recipientUser" name="recipientUser">
-            <option value="">Todos os usuários</option>
+@php($t = $t ?? fn (string $key, array $replace = []) => __("notification-bell::panel.{$key}", $replace, config('notifications.locale')))
+{{--
+    Partial reutilizada nos modais de criação e edição.
+    Parâmetros esperados via @include:
+    - $formId: id do <form>
+    - $idPrefix: prefixo dos ids dos campos (ex.: 'nbp-create-' ou 'nbp-edit-')
+    - $isEdit: bool
+--}}
+@php($idPrefix = $idPrefix ?? 'nbp-create-')
+@php($isEdit = $isEdit ?? false)
+
+<div class="nbp-field" data-field="title">
+    <label class="nbp-label" for="{{ $idPrefix }}title">
+        {{ $t('field_title') }} <span class="nbp-required">*</span>
+    </label>
+    <input
+        type="text"
+        class="nbp-input"
+        id="{{ $idPrefix }}title"
+        name="title"
+        required
+        maxlength="255"
+        placeholder="{{ $t('field_title_placeholder') }}"
+    >
+    <p class="nbp-error-text"></p>
+</div>
+
+<div class="nbp-field" data-field="message">
+    <label class="nbp-label" for="{{ $idPrefix }}message">
+        {{ $t('field_message') }} <span class="nbp-required">*</span>
+    </label>
+    <textarea
+        class="nbp-textarea"
+        id="{{ $idPrefix }}message"
+        name="message"
+        required
+        placeholder="{{ $t('field_message_placeholder') }}"
+    ></textarea>
+    <p class="nbp-error-text"></p>
+</div>
+
+<div class="nbp-grid-2">
+    <div class="nbp-field" data-field="type">
+        <label class="nbp-label" for="{{ $idPrefix }}type">
+            {{ $t('field_type') }} <span class="nbp-required">*</span>
+        </label>
+        <select class="nbp-select" id="{{ $idPrefix }}type" name="type" required>
+            <option value="info">{{ $t('type_info') }}</option>
+            <option value="success">{{ $t('type_success') }}</option>
+            <option value="warning">{{ $t('type_warning') }}</option>
+            <option value="error">{{ $t('type_error') }}</option>
+        </select>
+        <p class="nbp-error-text"></p>
+    </div>
+
+    <div class="nbp-field" data-field="recipientUser">
+        <label class="nbp-label" for="{{ $idPrefix }}recipient">
+            {{ $t('field_recipient') }}
+            <span class="nbp-label-optional">({{ $t('user_all') }})</span>
+        </label>
+        <select class="nbp-select" id="{{ $idPrefix }}recipient" name="recipientUser">
+            <option value="">{{ $t('user_all') }}</option>
             @foreach ($users as $user)
                 <option value="{{ $user->id }}">{{ $user->{$nameColumn} }}</option>
             @endforeach
         </select>
-        <div class="text-sm text-red-600 mt-1 hidden" id="recipientUser-error"></div>
+        <p class="nbp-hint">{{ $t('field_recipient_hint') }}</p>
+        <p class="nbp-error-text"></p>
     </div>
-    
-    <div>
-        <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Notificação</label>
-        <select class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50" id="type" name="type" required>
-            <option value="info">Informação</option>
-            <option value="success">Sucesso</option>
-            <option value="warning">Aviso</option>
-            <option value="error">Erro</option>
+</div>
+
+<div class="nbp-grid-2">
+    <div class="nbp-field" data-field="url">
+        <label class="nbp-label" for="{{ $idPrefix }}url">
+            {{ $t('field_url') }}
+        </label>
+        <input
+            type="url"
+            class="nbp-input"
+            id="{{ $idPrefix }}url"
+            name="url"
+            maxlength="500"
+            placeholder="{{ $t('field_url_placeholder') }}"
+        >
+        <p class="nbp-error-text"></p>
+    </div>
+
+    <div class="nbp-field" data-field="processing_type">
+        <label class="nbp-label" for="{{ $idPrefix }}processing">
+            {{ $t('field_processing') }} <span class="nbp-required">*</span>
+        </label>
+        <select class="nbp-select" id="{{ $idPrefix }}processing" name="processing_type" required>
+            <option value="immediate">{{ $t('processing_immediate') }}</option>
+            <option value="queue">{{ $t('processing_queue') }}</option>
         </select>
-        <div class="text-sm text-red-600 mt-1 hidden" id="type-error"></div>
+        <p class="nbp-error-text"></p>
     </div>
-    
-    <div>
-        <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Título</label>
-        <input type="text" class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50" id="title" name="title" required>
-        <div class="text-sm text-red-600 mt-1 hidden" id="title-error"></div>
-    </div>
-    
-    <div>
-        <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Conteúdo da Notificação</label>
-        <textarea class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50" id="message" name="message" rows="3" required></textarea>
-        <div class="text-sm text-red-600 mt-1 hidden" id="message-error"></div>
-    </div>
-    
-    <div>
-        <label for="url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL (opcional)</label>
-        <input type="url" class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50" id="url" name="url" placeholder="https://exemplo.com">
-        <div class="text-sm text-red-600 mt-1 hidden" id="url-error"></div>
-    </div>
-    
-    <div class="flex justify-end space-x-3 pt-3">
-        <button type="button" @click="open = false" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-white rounded-md transition-colors duration-200">Cancelar</button>
-        <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md shadow-sm transition-colors duration-200">Salvar</button>
-    </div>
-</form>
+</div>

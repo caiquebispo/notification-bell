@@ -2,9 +2,9 @@
 
 namespace CaiqueBispo\NotificationBell\Jobs;
 
-use Illuminate\Foundation\Queue\Queueable;
+use CaiqueBispo\NotificationBell\Services\NotificationDispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use CaiqueBispo\NotificationBell\Models\Notification;
+use Illuminate\Foundation\Queue\Queueable;
 
 class NotificationBellJob implements ShouldQueue
 {
@@ -12,16 +12,8 @@ class NotificationBellJob implements ShouldQueue
 
     public function __construct(private array $notifications) {}
 
-    public function handle(): void
+    public function handle(NotificationDispatcher $dispatcher): void
     {
-        $rows = array_map(function ($notification) {
-            if (isset($notification['data']) && is_array($notification['data'])) {
-                $notification['data'] = json_encode($notification['data']);
-            }
-
-            return $notification;
-        }, $this->notifications);
-
-        Notification::insert($rows);
+        $dispatcher->dispatch($this->notifications);
     }
 }

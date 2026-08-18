@@ -26,6 +26,11 @@
             "CaiqueBispo\\NotificationBell\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "CaiqueBispo\\NotificationBell\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Caique Bispo",
@@ -36,6 +41,10 @@
         "php": "^8.1",
         "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
         "livewire/livewire": "^3.5.0|^4.0.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "phpunit/phpunit": "^10.5|^11.0"
     },
     "extra": {
         "laravel": {

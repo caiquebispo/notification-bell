@@ -3,6 +3,7 @@
 namespace CaiqueBispo\NotificationBell\Traits;
 
 use CaiqueBispo\NotificationBell\Models\Notification;
+use CaiqueBispo\NotificationBell\Models\NotificationPreference;
 use CaiqueBispo\NotificationBell\Helpers\NotificationHelper;
 
 trait HasNotifications
@@ -11,6 +12,18 @@ trait HasNotifications
     public function bellNotifications()
     {
         return $this->hasMany(Notification::class);
+    }
+    public function archivedBellNotifications()
+    {
+        return $this->hasMany(Notification::class)->archived();
+    }
+    public function pinnedBellNotifications()
+    {
+        return $this->hasMany(Notification::class)->pinned();
+    }
+    public function bellPreferences(): NotificationPreference
+    {
+        return NotificationPreference::forUser($this->getKey());
     }
     public function unreadBellNotifications()
     {

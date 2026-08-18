@@ -55,6 +55,8 @@
         ]),
 
         showToast(data) {
+            // O dispatch() do Livewire embrulha payloads posicionais em array.
+            if (Array.isArray(data)) data = data[0] ?? {};
             if (this.prefs.snoozed) return;
             if (this.prefs.sound) this.playSound(data.type || 'info');
             if (!this.prefs.toasts) return;
@@ -69,6 +71,7 @@
         },
 
         showUndoToast(data) {
+            if (Array.isArray(data)) data = data[0] ?? {};
             const id = ++this.toastId;
             this.toasts.push({
                 id,
@@ -148,15 +151,20 @@
 
         initEcho() {
             @if(config('notifications.broadcasting.enabled', false) && auth()->check())
-                if (typeof window.Echo === 'undefined') return;
+                // Assinatura GLOBAL única por aba: com wire:navigate o componente
+                // renasce a cada página, mas o canal é um só. A assinatura
+                // re-emite um evento de janela e cada instância viva reage via
+                // x-on (limpo pelo Alpine junto com o componente) — sem
+                // listeners duplicados nem closures presas a componentes mortos.
+                if (typeof window.Echo === 'undefined' || window.__nbEchoBound) return;
+                window.__nbEchoBound = true;
 
                 const channel = @js(str_replace('{user_id}', (string) auth()->id(), config('notifications.broadcasting.channel', 'notifications.{user_id}')));
                 const eventName = '.' + @js(config('notifications.broadcasting.event', 'NotificationCreated'));
                 const source = @js(config('notifications.broadcasting.private', true)) ? window.Echo.private(channel) : window.Echo.channel(channel);
 
-                source.listen(eventName, (payload) => {
-                    $wire.loadNotifications();
-                    this.showToast(payload);
+                source.listen(eventName, () => {
+                    window.dispatchEvent(new CustomEvent('nb-broadcast'));
                 });
             @endif
         },
@@ -165,6 +173,9 @@
     x-effect="if (!open) confirmClear = false"
     x-on:new-notification.window="showToast($event.detail)"
     x-on:notification-deleted.window="showUndoToast($event.detail)"
+    {{-- Recarrega ao receber broadcast; o toast/som sai do detector de novas
+         notificações do próprio loadNotifications, com os dados corretos. --}}
+    x-on:nb-broadcast.window="$wire.loadNotifications()"
     x-on:keydown.escape.window="modalOpen ? closeModal() : (open = false)"
     @if($this->pollingEnabled)
         wire:poll.{{ $this->pollingInterval }}="loadNotifications"

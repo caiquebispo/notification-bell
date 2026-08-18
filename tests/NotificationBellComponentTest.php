@@ -112,8 +112,10 @@ class NotificationBellComponentTest extends TestCase
 
         $component = Livewire::actingAs($user)->test(NotificationBell::class);
 
+        // Valor fora das opções configuradas é ignorado — e como ler
+        // preferências não grava nada, a tabela segue vazia.
         $component->call('snooze', 999999);
-        $this->assertDatabaseHas('notification_preferences', ['user_id' => $user->id, 'snoozed_until' => null]);
+        $this->assertDatabaseCount('notification_preferences', 0);
 
         $component->call('snooze', 60);
         $this->assertNotNull($user->bellPreferences()->fresh()->snoozed_until);
@@ -152,6 +154,24 @@ class NotificationBellComponentTest extends TestCase
             ->call('clearAll');
 
         $this->assertNull($foreign->fresh()->deleted_at);
+    }
+
+    public function test_rendering_the_bell_never_writes_preferences(): void
+    {
+        // O sino aparece em toda página do host: renderizar não pode gerar
+        // INSERT. A linha só nasce quando o usuário muda algo de fato.
+        $user = $this->createUser();
+        $this->notify($user);
+
+        Livewire::actingAs($user)->test(NotificationBell::class);
+
+        $this->assertDatabaseCount('notification_preferences', 0);
+
+        Livewire::actingAs($user)
+            ->test(NotificationBell::class)
+            ->call('updateSound', true);
+
+        $this->assertDatabaseCount('notification_preferences', 1);
     }
 
     public function test_polling_renders_the_configured_interval(): void

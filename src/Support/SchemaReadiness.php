@@ -32,12 +32,20 @@ class SchemaReadiness
                 return self::$ready = true;
             }
 
-            $isReady = Schema::hasTable('notifications')
-                && Schema::hasColumn('notifications', 'deleted_at')
-                && Schema::hasColumn('notifications', 'archived_at')
-                && Schema::hasTable('notification_preferences')
-                && Schema::hasColumn('notification_preferences', 'toasts_enabled')
-                && Schema::hasColumn('notification_preferences', 'snoozed_until');
+            // Uma única query de introspecção, não seis: getColumnListing já
+            // traz todas as colunas da tabela, e hasTable('notification_
+            // preferences') é dispensável — só a coluna interessa, e ela não
+            // existe sem a tabela. O sino renderiza em TODA página do host:
+            // cada query aqui é paga pelo site inteiro.
+            $columns = Schema::getColumnListing('notifications');
+
+            $isReady = in_array('deleted_at', $columns, true)
+                && in_array('archived_at', $columns, true)
+                && in_array(
+                    'toasts_enabled',
+                    Schema::getColumnListing('notification_preferences'),
+                    true
+                );
 
             if ($isReady) {
                 Cache::put(self::CACHE_KEY, true, now()->addDay());

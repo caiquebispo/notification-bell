@@ -70,7 +70,7 @@ class NotificationBell extends Component
 
         $this->notifications = $this->applyGrouping($notifications)->toArray();
 
-        $this->detectNewNotifications($userId);
+        $this->detectNewNotifications($notifications);
     }
 
     /**
@@ -113,9 +113,16 @@ class NotificationBell extends Component
             ->values();
     }
 
-    private function detectNewNotifications($userId): void
+    /**
+     * @param  \Illuminate\Support\Collection<int, Notification>  $notifications
+     *        Lista já carregada — nenhuma query extra: o sino renderiza em
+     *        toda página do host e cada consulta aqui é paga pelo site inteiro.
+     */
+    private function detectNewNotifications($notifications): void
     {
-        $latest = Notification::forBell($userId)->first();
+        // Maior id da leva, não o primeiro item: a lista vem com as fixadas no
+        // topo, então o primeiro pode ser uma notificação antiga.
+        $latest = $notifications->sortByDesc('id')->first();
 
         if (!$latest) {
             return;
@@ -123,9 +130,12 @@ class NotificationBell extends Component
 
         if ($this->lastNotificationId !== null && $latest->id > $this->lastNotificationId) {
             // Preferências mandam: nada de toast/som em snooze ou silêncio.
-            $preference = $this->preference();
+            // O array vem do mount e sobrevive entre requests (estado do
+            // Livewire), então o poll não precisa reconsultar; se estiver
+            // vazio, o Alpine ainda faz a checagem no cliente.
+            $snoozed = $this->preferences['is_snoozed'] ?? false;
 
-            if (!$preference || !$preference->isSnoozed()) {
+            if (!$snoozed) {
                 $this->dispatch('new-notification', [
                     'title' => $latest->title,
                     'message' => $latest->message,
@@ -276,7 +286,9 @@ class NotificationBell extends Component
             return;
         }
 
-        $preference = NotificationPreference::forUser(auth()->id());
+        // readForUser: leitura pura. Renderizar o sino não pode escrever no
+        // banco — isso rodaria em toda página, para todo visitante logado.
+        $preference = NotificationPreference::readForUser(auth()->id());
 
         $this->preferences = [
             'toasts_enabled' => $preference->toasts_enabled,

@@ -34,19 +34,44 @@ class NotificationPreference extends Model
     }
 
     /**
-     * Preferências do usuário, criando o registro padrão na primeira leitura.
+     * Preferências do usuário SEM gravar nada: devolve uma instância com os
+     * padrões quando ainda não existe registro.
+     *
+     * O sino renderiza em toda página, e a esmagadora maioria dos usuários
+     * nunca abre o painel de preferências — criar a linha só para ler os
+     * padrões custaria um INSERT por usuário e uma escrita no caminho de
+     * leitura mais quente do host. A linha nasce em forUser(), na primeira
+     * vez que o usuário de fato muda uma preferência.
      */
-    public static function forUser($userId): self
+    public static function readForUser($userId): self
     {
-        $defaults = [
+        $existing = static::where('user_id', $userId)->first();
+
+        if ($existing) {
+            return $existing;
+        }
+
+        return static::make(static::defaults())->forceFill(['user_id' => $userId]);
+    }
+
+    /** @return array<string, mixed> */
+    private static function defaults(): array
+    {
+        return [
             'toasts_enabled' => config('notifications.features.toasts.enabled', true),
             'sound_enabled' => config('notifications.features.sound.enabled', false),
             'sound_volume' => (int) round(config('notifications.features.sound.volume', 0.5) * 100),
             'muted_categories' => [],
         ];
+    }
 
+    /**
+     * Preferências do usuário, criando o registro padrão na primeira leitura.
+     */
+    public static function forUser($userId): self
+    {
         try {
-            return static::firstOrCreate(['user_id' => $userId], $defaults);
+            return static::firstOrCreate(['user_id' => $userId], static::defaults());
         } catch (\Illuminate\Database\UniqueConstraintViolationException $e) {
             // Duas requisições simultâneas criaram ao mesmo tempo: o índice
             // único garantiu um só registro — basta reler.

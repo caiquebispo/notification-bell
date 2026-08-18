@@ -384,12 +384,18 @@ class NotificationBell extends Component
         return NotificationPreference::forUser(auth()->id());
     }
 
-    public function getPollingEnabledProperty(): bool
+    /**
+     * Métodos comuns, NÃO computed properties: `pollingInterval` já é uma
+     * propriedade pública (prop de instância), e `$this->pollingInterval` na
+     * view leria o null dela em vez do getter — deixando o wire:poll sem
+     * intervalo e matando o fallback em silêncio.
+     */
+    public function resolvePollingEnabled(): bool
     {
         return $this->polling ?? config('notifications.polling.enabled', true);
     }
 
-    public function getPollingIntervalProperty(): string
+    public function resolvePollingInterval(): string
     {
         return $this->pollingInterval ?? config('notifications.polling.interval', '10s');
     }

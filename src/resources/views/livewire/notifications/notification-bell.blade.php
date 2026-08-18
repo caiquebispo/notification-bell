@@ -177,8 +177,8 @@
          notificações do próprio loadNotifications, com os dados corretos. --}}
     x-on:nb-broadcast.window="$wire.loadNotifications()"
     x-on:keydown.escape.window="modalOpen ? closeModal() : (open = false)"
-    @if($this->pollingEnabled)
-        wire:poll.{{ $this->pollingInterval }}="loadNotifications"
+    @if($this->resolvePollingEnabled())
+        wire:poll.{{ $this->resolvePollingInterval() }}="loadNotifications"
     @endif
 >
     {{-- Região aria-live: leitores de tela anunciam novas notificações --}}

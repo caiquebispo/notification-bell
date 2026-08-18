@@ -154,6 +154,28 @@ class NotificationBellComponentTest extends TestCase
         $this->assertNull($foreign->fresh()->deleted_at);
     }
 
+    public function test_polling_renders_the_configured_interval(): void
+    {
+        config(['notifications.polling.enabled' => true, 'notifications.polling.interval' => '60s']);
+
+        Livewire::actingAs($this->createUser())
+            ->test(NotificationBell::class)
+            ->assertSee('wire:poll.60s', false);
+    }
+
+    public function test_polling_can_be_disabled_and_overridden_per_instance(): void
+    {
+        config(['notifications.polling.enabled' => true, 'notifications.polling.interval' => '60s']);
+
+        Livewire::actingAs($this->createUser())
+            ->test(NotificationBell::class, ['polling' => false])
+            ->assertDontSee('wire:poll', false);
+
+        Livewire::actingAs($this->createUser())
+            ->test(NotificationBell::class, ['pollingInterval' => '15s'])
+            ->assertSee('wire:poll.15s', false);
+    }
+
     public function test_english_is_the_default_language(): void
     {
         $user = $this->createUser();
